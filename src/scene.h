@@ -20,6 +20,7 @@ typedef struct {
     Geometry_t 		*geometry;	/*!< an array of geometry objects in scene */
     Light_t		*light;		/*!< an array of light objects in the scene */
     Camera_t		*camera;	/*!< the camera in the scene */
+    Settings_t		settings;	/*!< global properties in the scene */
 } Scene_t;
 
 #endif
