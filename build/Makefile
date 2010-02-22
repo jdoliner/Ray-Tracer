@@ -18,21 +18,16 @@ else
   DOXYGEN =	/usr/bin/doxygen
 endif
 
-ifeq ($(OS),Darwin)
-  CPPFLAGS = -I/opt/local/include
-  LDFLAGS = -framework GLUT -framework OpenGL -framework Foundation -L/opt/local/lib -lpng
-else
-  LDFLAGS = -lglut -lGL -lGLU -lm -lpng
-endif
 CC =		gcc --std=gnu99
-CFLAGS =	-Wall -pedantic
+CFLAGS =	-Wall -pedantic -ggdb
+LDFLAGS =	
 
 # where to find the source code
 #
-VPATH =		../src
+VPATH =		../src ../src/engine ../src/objects ../src/objects/primitives
 
-SRCS =		$(wildcard ../src/*.c)
-INCLUDES =	$(wildcard ../src/*.h)
+SRCS =		$(wildcard ../src/*.c) $(wildcard ../src/engine/*.c) $(wildcard ../src/objects/*.c) $(wildcard ../src/primitives/*.c)
+INCLUDES =	$(wildcard ../src/*.h) $(wildcard ../src/engine/*.r) $(wildcard ../src/objects/*.r) $(wildcard ../src/primitives/*.r)
 DOC_SRCS =	$(SRCS) $(INCLUDES) ../main-page
 
 OBJS =		$(notdir $(SRCS:.c=.o))
@@ -49,7 +44,7 @@ doc:		../doc
 
 # include-file dependency information
 #
-.depend:	$(SRCS) $(INCLUDES)
+.depend:	$(SRCS) $(INCLUDES) 
 	- $(CC) $(CFLAGS) $(CPPFLAGS) -MM $(SRCS) > .depend
 
 # cleanup by removing generated files
