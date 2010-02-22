@@ -30,6 +30,7 @@ typedef union {
     Geo_Box_t 		box;		/*!< a pointer a cube*/
     Geo_Torus_t		torus;		/*!< a pointer a torus*/
 } Primitive_t;
+
 /*! the struct of a geometry object */
 typedef struct {
     Vec3f_t		loc;		/*!< the location of the object */

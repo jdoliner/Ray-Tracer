@@ -31,6 +31,22 @@ typedef struct {
 					//!< a unit vector
 } Rayf_t;
 
+/*! \brief find the minumum of 2 values */
+static inline float Minf (float a, float b) {
+    if (a < b)
+	return a;
+    else
+	return b;
+}
+
+/* \brief find the maximum of 2 values */
+static inline float Maxf (float a, float b) {
+    if (a > b)
+	return a;
+    else
+	return b;
+}
+
 //! \brief Square a number
 static inline float Sqrf (float x) { return (x*x); }
 

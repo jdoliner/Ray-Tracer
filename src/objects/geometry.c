@@ -21,12 +21,14 @@ void Calculate_Bbox(Geometry_t *geometry) {
 	    break;
 	case TORUS:
 	    break;
+	default:
+	    return ;
     }
 }
 
 /* !Intersect
- * \brief 
+ * \brief intersect a ray with a geometry object
  */
 Intersection_t *Intersect(Rayf_t *ray, Geometry_t *geometry) {
-
+    return NULL;
 }
