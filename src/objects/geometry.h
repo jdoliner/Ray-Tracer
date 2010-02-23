@@ -33,9 +33,9 @@ typedef union {
 
 /*! the struct of a geometry object */
 typedef struct {
-    Vec3f_t		loc;		/*!< the location of the object */
     Vec3f_t		scale;		/*!< scaling along the objects x,y,z coordinates */
     Quatf_t		rot;		/*!< the rotation of the object */
+    Vec3f_t		trans;		/*!< the translation of the object */
     BBox_t		bBox;		/*!< a bounding box around the object */
     Material_t		*material; 	/*!< information about how to render the object */
     Prim_Type_t		prim_type;	/*!< what type of primitive we have */ 

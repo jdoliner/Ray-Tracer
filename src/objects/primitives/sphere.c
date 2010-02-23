@@ -6,6 +6,7 @@
  */
 
 #include "../geometry.h"
+#include "sphere.h"
 
 /*! \brief intersect a ray with a sphere, only returns the first intersection point
  */
