@@ -31,7 +31,7 @@ typedef struct {
 					//!< a unit vector
 } Rayf_t;
 
-/*! \brief find the minumum of 2 values */
+/*! \brief find the minumum of 2 floats */
 static inline float Minf (float a, float b) {
     if (a < b)
 	return a;
@@ -39,12 +39,20 @@ static inline float Minf (float a, float b) {
 	return b;
 }
 
-/* \brief find the maximum of 2 values */
+/* \brief find the maximum of 2 floats */
 static inline float Maxf (float a, float b) {
     if (a > b)
 	return a;
     else
 	return b;
+}
+
+/* \brief find the absolute value of a float */
+static inline float Absf (float a) {
+    if (a > 0)
+	return a;
+    else
+	return -a;
 }
 
 //! \brief Square a number
