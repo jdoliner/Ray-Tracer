@@ -20,14 +20,14 @@ endif
 
 CC =		gcc --std=gnu99
 CFLAGS =	-Wall -pedantic -ggdb
-LDFLAGS =	
+LDFLAGS =	-lm
 
 # where to find the source code
 #
 VPATH =		../src ../src/engine ../src/objects ../src/objects/primitives
 
-SRCS =		$(wildcard ../src/*.c) $(wildcard ../src/engine/*.c) $(wildcard ../src/objects/*.c) $(wildcard ../src/primitives/*.c)
-INCLUDES =	$(wildcard ../src/*.h) $(wildcard ../src/engine/*.r) $(wildcard ../src/objects/*.r) $(wildcard ../src/primitives/*.r)
+SRCS =		$(wildcard ../src/*.c) $(wildcard ../src/engine/*.c) $(wildcard ../src/objects/*.c) $(wildcard ../src/objects/primitives/*.c)
+INCLUDES =	$(wildcard ../src/*.h) $(wildcard ../src/engine/*.h) $(wildcard ../src/objects/*.h) $(wildcard ../src/objects/primitives/*.h)
 DOC_SRCS =	$(SRCS) $(INCLUDES) ../main-page
 
 OBJS =		$(notdir $(SRCS:.c=.o))
