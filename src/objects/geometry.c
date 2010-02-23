@@ -62,5 +62,7 @@ Intersection_t *Intersect_Geo(Rayf_t *ray, Geometry_t *geometry) {
     }
 
     AddV3f(intersection->point, geometry->trans, intersection->point);
+
+    intersection->material = geometry->material;
     return intersection;
 }
