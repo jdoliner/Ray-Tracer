@@ -47,4 +47,6 @@ Intersection_t *Intersect_Box(Rayf_t *ray, Geo_Box_t *box) {
 	CopyV3f(normal, intersection->norm);
 	return intersection;
     }
+
+    return NULL;
 }

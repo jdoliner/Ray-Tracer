@@ -8,7 +8,7 @@
 #ifndef _SPHERE_H_
 #define _SPHERE_H_
 
-#include "geometry.h"
+#include "../intersection.h"
 
 /*! structure to represent a sphere */
 typedef struct {

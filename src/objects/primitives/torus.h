@@ -8,7 +8,7 @@
 #ifndef _TORUS_H_
 #define _TORUS_H_
 
-#include "geometry.h"
+#include "../intersection.h"
 
 typedef struct {
     float	revRadius;	/* !< the radius of revolution */
@@ -17,6 +17,6 @@ typedef struct {
 
 /*! \brief intersect a ray with a torus, only returns the first intersection point
  */
-Intersection_t *Intersect_Torus(Rayf_t *ray, Geo_Box_t *torus);
+Intersection_t *Intersect_Torus(Rayf_t *ray, Geo_Torus_t *torus);
 
 #endif

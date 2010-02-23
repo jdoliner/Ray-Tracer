@@ -42,11 +42,9 @@ typedef struct {
     Primitive_t		primitive;	/*!< what point to the object primitive */
 } Geometry_t;
 
-/*! struct for in intersection between a ray and a piece of geometry */
-typedef struct {
-    float 		t;		/*!< the parameter of the first intersection */
-    Vec3f_t		point;		/*!< the point of intersection */
-    Vec3f_t		norm;		/*!< the normal of the object at the point of intersection */
-} Intersection_t;
+/* !Intersect
+ * \brief intersect a ray with a geometry object
+ */
+Intersection_t *Intersect_Geo(Rayf_t *ray, Geometry_t *geometry);
 
 #endif

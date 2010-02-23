@@ -8,7 +8,7 @@
 #ifndef _BOX_H_
 #define _BOX_H_
 
-#include "geometry.h"
+#include "../intersection.h"
 
 /*! structure to store a box
  * box has faces lying in planes x = +- rx, y = +- ry, z = +- rz */

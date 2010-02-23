@@ -17,9 +17,7 @@ Intersection_t *Intersect_Sphere(Rayf_t *ray, Geo_Sphere_t *sphere) {
     float c = LengthSqV3f(ray->orig) - Sqrf(sphere->radius);
     float D = Sqrf(b) - (4 * a * c);
 
-    if (D < 0)
-	return NULL;
-    else {
+    if (D >= 0) {
 	float t1 = (-b - sqrtf(D)) / (2 * a), t2 = (-b + sqrtf(D)) / (2 * a); /* two candidate intersection parameters */
 	float t; /* the smallest positive candidate intersection parameter */
 	
@@ -40,4 +38,6 @@ Intersection_t *Intersect_Sphere(Rayf_t *ray, Geo_Sphere_t *sphere) {
 	CopyV3f(intersection->point, intersection->norm);
 	NormalizeV3f(intersection->norm);
     }
+
+    return NULL;
 }

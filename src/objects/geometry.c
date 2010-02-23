@@ -6,10 +6,11 @@
  */
 
 #include "geometry.h"
-#include "primtives/sphere.h"
+#include "primitives/sphere.h"
 #include "primitives/box.h"
 #include "primitives/torus.h"
 #include "../engine/defs.h"
+#include "intersection.h"
 
 /* !Calculate_Bbox
  * \brief calculates and sets the bounding box of a geometry object in global coordinates
@@ -30,33 +31,36 @@ void Calculate_Bbox(Geometry_t *geometry) {
 /* !Intersect
  * \brief intersect a ray with a geometry object
  */
-Intersection_t *Intersect(Rayf_t *ray, Geometry_t *geometry) {
+Intersection_t *Intersect_Geo(Rayf_t *ray, Geometry_t *geometry) {
     /* set up the ray in geometry space */
     Rayf_t geospaceRay;
+    Quatf_t inverseRot;
+    InverseQuatf(geometry->rot, inverseRot);
     CopyV3f(ray->dir, geospaceRay.dir);
     CopyV3f(ray->orig, geospaceRay.orig);
 
-    RotateVecByQuatf(geometry->rot, ray->orig, ray->orig);
-    RotateVecByQuatf(geometry->rot, ray->dir, ray->dir);
+    /* RotateVecByQuatf(inverseRot, ray->orig, ray->orig);
+    RotateVecByQuatf(inverseRot, ray->dir, ray->dir); */
 
-    AddV3f(ray->orig, geometry->trans, ray->orig);
+    SubV3f(ray->orig, geometry->trans, ray->orig);
 
     /*now the ray is ready */
     Intersection_t *intersection;
     
     switch(geometry->prim_type) {
 	case SPHERE:
-	    intersection = Intersect_Sphere(geospaceRay, geometry->primitive.sphere);
+	    intersection = Intersect_Sphere(&geospaceRay, &(geometry->primitive.sphere));
 	    break;
 	case BOX:
-	    intersection = Intersect_Box(geospaceRay, geometry->primitive.box);
+	    intersection = Intersect_Box(&geospaceRay, &(geometry->primitive.box));
 	    break;
 	case TORUS:
-	    intersection = Intersect_Torus(geospaceRay, geometry->primitive.torus);
+	    intersection = Intersect_Torus(&geospaceRay, &(geometry->primitive.torus));
 	    break;
 	default:
 	    assert(0);
     }
 
-    /* stubs out here */
+    AddV3f(intersection->point, geometry->trans, intersection->point);
+    return intersection;
 }

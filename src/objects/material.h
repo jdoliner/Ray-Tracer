@@ -5,6 +5,9 @@
  * \author Joe Doliner
  */
 
+#ifndef _MATERIAL_H_
+#define _MATERIAL_H_
+
 #include "../engine/vector.h"
 
 /*! struct for a material */
@@ -16,3 +19,5 @@ typedef struct {
     float	transperancy;	/* !< transparency in [0, 1] */
     float	reflection;	/* !< reflection in [0, 1] */
 } Material_t;
+
+#endif
