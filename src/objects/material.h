@@ -12,8 +12,8 @@
 
 /*! struct for a material */
 typedef struct {
-    Vec3f_t	diffuse_color;	/* !< diffuse color */
-    Vec3f_t	spec_color;	/* !< specular color */
+    Color_t	diffuse_color;	/* !< diffuse color */
+    Color_t	spec_color;	/* !< specular color */
     float	spec;		/* !< how specular the object is */
     float	glossiness;	/* !< the exponent for the specular highlights */
     float	transperancy;	/* !< transparency in [0, 1] */

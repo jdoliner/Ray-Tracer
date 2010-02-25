@@ -14,7 +14,7 @@
 
 /*! \brief settings for a scene */
 typedef struct {
-    int pass;
+    Vec3f_t		background;	/*!< the background color of the scene */
 } Settings_t;
 
 /*! \brief a scene */

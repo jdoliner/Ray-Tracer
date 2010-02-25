@@ -24,16 +24,24 @@ LDFLAGS =	-lm
 
 # where to find the source code
 #
-VPATH =		../src ../src/engine ../src/objects ../src/objects/primitives
+VPATH =		../src ../src/engine ../src/objects ../src/objects/primitives ../src/engine/EasyBMP
 
-SRCS =		$(wildcard ../src/*.c) $(wildcard ../src/engine/*.c) $(wildcard ../src/objects/*.c) $(wildcard ../src/objects/primitives/*.c)
-INCLUDES =	$(wildcard ../src/*.h) $(wildcard ../src/engine/*.h) $(wildcard ../src/objects/*.h) $(wildcard ../src/objects/primitives/*.h)
+SRCS =		$(wildcard ../src/*.c) $(wildcard ../src/engine/*.c) $(wildcard ../src/objects/*.c) $(wildcard ../src/objects/primitives/*.c) 
+CPPSRCS =	$(wildcard ../src/engine/EasyBMP/*.cpp)
+INCLUDES =	$(wildcard ../src/*.h) $(wildcard ../src/engine/*.h) $(wildcard ../src/objects/*.h) $(wildcard ../src/objects/primitives/*.h) $(wildcard ../src/engine/EasyBMP/*.h)
 DOC_SRCS =	$(SRCS) $(INCLUDES) ../main-page
 
-OBJS =		$(notdir $(SRCS:.c=.o))
+OBJS =		$(notdir $(SRCS:.c=.o)) 
+CPPOBJS =	$(notdir $(CPPSRCS:.cpp=.o))
 
-$(TARGET):	$(OBJS) .depend
-	$(CC) $(CFLAGS) -o $(TARGET) $(OBJS) $(LDFLAGS)
+$(TARGET):	$(OBJS) $(CPPOBJS) .depend
+	g++ $(CFLAGS) -o $(TARGET) $(OBJS) $(CPPOBJS) $(LDFLAGS)
+
+EasyBMP.o:	$(CPPSRCS) .depend
+	g++ $(CFLAGS) -c $(CPPSRCS) -o $(CPPOBJS)
+
+raytracer.o:	$(SRCS) .depend
+	g++ $(CFLAGS) -c ../src/raytracer.c -o raytracer.o
 
 .PHONY:		doc
 doc:		../doc
