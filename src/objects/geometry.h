@@ -21,7 +21,7 @@ typedef enum {
     SPHERE = 0,
     BOX,
     TORUS,
-    NUM_PRIMS,
+    NUM_PRIMS
 } Prim_Type_t;
 
 /*! abstraction of a primitive */
@@ -39,7 +39,7 @@ typedef struct {
     BBox_t		bBox;		/*!< a bounding box around the object */
     Material_t		*material; 	/*!< information about how to render the object */
     Prim_Type_t		prim_type;	/*!< what type of primitive we have */ 
-    Primitive_t		primitive;	/*!< what point to the object primitive */
+    Primitive_t		*primitive;	/*!< what point to the object primitive */
 } Geometry_t;
 
 /* !Intersect

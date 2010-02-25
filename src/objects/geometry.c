@@ -49,20 +49,22 @@ Intersection_t *Intersect_Geo(Rayf_t *ray, Geometry_t *geometry) {
     
     switch(geometry->prim_type) {
 	case SPHERE:
-	    intersection = Intersect_Sphere(&geospaceRay, &(geometry->primitive.sphere));
+	    intersection = Intersect_Sphere(&geospaceRay, &(geometry->primitive->sphere));
 	    break;
 	case BOX:
-	    intersection = Intersect_Box(&geospaceRay, &(geometry->primitive.box));
+	    intersection = Intersect_Box(&geospaceRay, &(geometry->primitive->box));
 	    break;
 	case TORUS:
-	    intersection = Intersect_Torus(&geospaceRay, &(geometry->primitive.torus));
+	    intersection = Intersect_Torus(&geospaceRay, &(geometry->primitive->torus));
 	    break;
 	default:
 	    assert(0);
     }
 
-    AddV3f(intersection->point, geometry->trans, intersection->point);
+    if(intersection != NULL) {
+	AddV3f(intersection->point, geometry->trans, intersection->point);
+	intersection->material = geometry->material;
+    }
 
-    intersection->material = geometry->material;
     return intersection;
 }

@@ -40,9 +40,6 @@ $(TARGET):	$(OBJS) $(CPPOBJS) .depend
 EasyBMP.o:	$(CPPSRCS) .depend
 	g++ $(CFLAGS) -c $(CPPSRCS) -o $(CPPOBJS)
 
-raytracer.o:	$(SRCS) .depend
-	g++ $(CFLAGS) -c ../src/raytracer.c -o raytracer.o
-
 .PHONY:		doc
 doc:		../doc
 

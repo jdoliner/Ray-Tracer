@@ -16,6 +16,18 @@
 #include <float.h>
 #include <assert.h>
 
+/* !Init_Scene
+ * \brief Allocate all the space needed for a scene and set the relevant values
+ */
+void Init_Scene(Scene_t *scene, int nGeo, int nLights) {
+    scene->nGeo = nGeo;
+    scene->nLights = nLights;
+    scene->geometry = NEWVEC(Geometry_t *, nGeo);
+    scene->light = NEWVEC(Light_t *, nLights);
+    scene->camera = NEW(Camera_t);
+    scene->settings = NEW(Settings_t);
+}
+
 /* !Intersect_Scene
  * \brief intersect a ray with an entire scene.
  */
@@ -45,7 +57,10 @@ Intersection_t *Intersect_Scene(Rayf_t *ray, Scene_t *scene) {
  */
 void Trace_Ray(Rayf_t *ray, Scene_t *scene, Color_t *color) {
     Intersection_t *intersection = Intersect_Scene(ray, scene);
-    CopyColor(intersection->material->diffuse_color, *color);
+    if (intersection)
+	CopyColor(intersection->material->diffuse_color, *color);
+    else
+	CopyColor(scene->settings->background, *color);
 }
 
 /* !Render_Scene
