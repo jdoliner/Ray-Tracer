@@ -37,6 +37,8 @@ Intersection_t *Intersect_Sphere(Rayf_t *ray, Geo_Sphere_t *sphere) {
 	/* for a sphere centered at the origin the normal of a point is the vector from the point to the origin */
 	CopyV3f(intersection->point, intersection->norm);
 	NormalizeV3f(intersection->norm);
+
+	return intersection;
     }
 
     return NULL;

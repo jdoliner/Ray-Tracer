@@ -1,10 +1,13 @@
 #include <stdio.h>
 #include "scene.h"
 #include "engine/defs.h"
+#include "engine/image.h"
 
 int main () {
     Scene_t scene;
     Init_Scene(&scene, 1, 0);
+    Color_t bg_color = {0, 0, 0, 255};
+    CopyColor(bg_color, scene.settings->background);
 
     Geo_Sphere_t sphere_data;
     sphere_data.radius = 1.0f;
@@ -40,6 +43,12 @@ int main () {
     int width = 512, height = 512;
 
     Color_t *render = Render_Scene(&scene, width, height);
+
+    Image_t *output = New_Image(width, height, render);
+
+    Write_Image(output, "output.ppm");
+
+    Delete_Image(output);
 
     return 0;
 }
