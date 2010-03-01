@@ -27,10 +27,10 @@ typedef struct {
     Settings_t		*settings;	/*!< global properties in the scene */
 } Scene_t;
 
-/* !Init_Scene
+/* !New_Scene
  * \brief Allocate all the space needed for a scene and set the relevant values
  */
-void Init_Scene(Scene_t *scene, int nGeo, int nLights);
+Scene_t *New_Scene(int nGeo, int nLights);
 
 /* !Intersect_Scene
  * \brief intersect a ray with an entire scene.

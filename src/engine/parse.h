@@ -8,6 +8,8 @@
 #ifndef _PARSE_H_
 #define _PARSE_H_
 
-#include "vector.h"
+#include "../scene.h"
+
+Scene_t *Parse_File(const char *fname);
 
 #endif

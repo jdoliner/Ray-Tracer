@@ -16,16 +16,18 @@
 #include <float.h>
 #include <assert.h>
 
-/* !Init_Scene
+/* !New_Scene
  * \brief Allocate all the space needed for a scene and set the relevant values
  */
-void Init_Scene(Scene_t *scene, int nGeo, int nLights) {
+Scene_t *New_Scene(int nGeo, int nLights) {
+    Scene_t *scene = NEW(Scene_t);
     scene->nGeo = nGeo;
     scene->nLights = nLights;
     scene->geometry = NEWVEC(Geometry_t *, nGeo);
     scene->light = NEWVEC(Light_t *, nLights);
     scene->camera = NEW(Camera_t);
     scene->settings = NEW(Settings_t);
+    return scene;
 }
 
 /* !Intersect_Scene

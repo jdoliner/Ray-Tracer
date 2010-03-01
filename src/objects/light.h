@@ -13,7 +13,7 @@
 #include "../engine/vector.h"
 
 typedef struct {
-    Vec3f_t	color;		/*!< the diffuse color of the light */
+    Color_t	color;		/*!< the diffuse color of the light */
     float	intensity;	/*!< the internsity of the light */
     Vec3f_t	pos;		/*!< position in global coordinates of the light */
     Vec3f_t	look_at;	/*!< the position the light is looking at */
