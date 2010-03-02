@@ -96,7 +96,6 @@ Color_t *Render_Scene(Scene_t *scene, int wres, int hres) {
     ScaleV3f(hoffsetLength, hoffset, hoffset);
 
     Rayf_t ray; /* the ray we'll shoot into the scene */
-    CopyV3f(scene->camera->pos, ray.orig);
     Vec3f_t screenPos; /* the position on the screen that the ray passes through */
 
     /* Calculate an initial position in the screen */
@@ -109,6 +108,7 @@ Color_t *Render_Scene(Scene_t *scene, int wres, int hres) {
 	    assert(wres % 2 == 0 && hres % 2 == 0);
 
 	    /* setup the ray */
+	    CopyV3f(scene->camera->pos, ray.orig);
 	    ScaledAddV3f(centerScreenPos, i - (wres / 2), woffset, screenPos);
 	    ScaledAddV3f(screenPos, j - (hres / 2), hoffset, screenPos);
 	    SubV3f(screenPos, ray.orig, ray.dir);

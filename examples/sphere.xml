@@ -7,13 +7,13 @@
     <translation> 
       <x>0</x> 
       <y>0</y> 
-      <z>0</z>
+      <z>5.0</z>
     </translation>
     <material>
       <diffuse_color> 
-	<r>255</r> 
-	<g>0</g>
-	<b>0</b>
+	<r>235</r> 
+	<g>165</g>
+	<b>165</b>
       </diffuse_color>
     </material>
   </geometry>
@@ -37,7 +37,7 @@
   </light>
   <camera>
     <pos> 
-      <x>2.0</x>
+      <x>10.0</x>
       <y>0.0</y>
       <z>0.0</z>
     </pos>
@@ -57,9 +57,9 @@
   </camera>
   <settings>
     <bg_color>
-      <r>0</r>
-      <g>255</g>
-      <b>0</b>
+      <r>45</r>
+      <g>103</g>
+      <b>45</b>
     </bg_color>
   </settings>
 </scene>

@@ -33,11 +33,11 @@ void Calculate_Bbox(Geometry_t *geometry) {
  */
 Intersection_t *Intersect_Geo(Rayf_t *ray, Geometry_t *geometry) {
     /* set up the ray in geometry space */
-    Rayf_t geospaceRay;
+    /* Rayf_t geospaceRay;
     Quatf_t inverseRot;
     InverseQuatf(geometry->rot, inverseRot);
     CopyV3f(ray->dir, geospaceRay.dir);
-    CopyV3f(ray->orig, geospaceRay.orig);
+    CopyV3f(ray->orig, geospaceRay.orig); */
 
     /* RotateVecByQuatf(inverseRot, ray->orig, ray->orig);
     RotateVecByQuatf(inverseRot, ray->dir, ray->dir); */
@@ -49,13 +49,13 @@ Intersection_t *Intersect_Geo(Rayf_t *ray, Geometry_t *geometry) {
     
     switch(geometry->prim_type) {
 	case SPHERE:
-	    intersection = Intersect_Sphere(&geospaceRay, &(geometry->primitive->sphere));
+	    intersection = Intersect_Sphere(ray, &(geometry->primitive->sphere));
 	    break;
 	case BOX:
-	    intersection = Intersect_Box(&geospaceRay, &(geometry->primitive->box));
+	    intersection = Intersect_Box(ray, &(geometry->primitive->box));
 	    break;
 	case TORUS:
-	    intersection = Intersect_Torus(&geospaceRay, &(geometry->primitive->torus));
+	    intersection = Intersect_Torus(ray, &(geometry->primitive->torus));
 	    break;
 	default:
 	    assert(0);
