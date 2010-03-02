@@ -267,4 +267,16 @@ static inline void CopyColor (Color_t src, Color_t dst)
     dst[3] = src[3];
 }
 
+//! \brief scale a color
+//! \param c the source color
+//! \param s the scaling factor
+//! \param dst the destination color
+static inline void ScaleColor (Color_t c, float s, Color_t dst)
+{
+    dst[0] = (char) lrint(s * c[0]);
+    dst[1] = (char) lrint(s * c[1]);
+    dst[2] = (char) lrint(s * c[2]);
+    dst[3] = c[3];
+}
+
 #endif /* !_VECTOR_H_ */

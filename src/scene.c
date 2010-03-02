@@ -57,12 +57,22 @@ Intersection_t *Intersect_Scene(Rayf_t *ray, Scene_t *scene) {
 /* !Trace_Ray
  * \brief shoots a ray into a scene and returns the color of the pixel
  */
-void Trace_Ray(Rayf_t *ray, Scene_t *scene, Color_t *color) {
+void Trace_Ray(Rayf_t *ray, Scene_t *scene, Color_t color) {
+    int i;
     Intersection_t *intersection = Intersect_Scene(ray, scene);
-    if (intersection)
-	CopyColor(intersection->material->diffuse_color, *color);
-    else
-	CopyColor(scene->settings->background, *color);
+    if (intersection) {
+	Vec3f_t lightVec;
+	float intensity = 0;
+	for (i = 0; i < scene->nLights; i++) {
+	    SubV3f(scene->light[i]->pos, intersection->point, lightVec);
+	    NormalizeV3f(lightVec);
+	    intensity += Clampf(DotV3f(lightVec, intersection->norm)) * scene->light[i]->intensity;
+	}
+	intensity /= scene->nLights;
+	CopyColor(intersection->material->diffuse_color, color);
+	ScaleColor(color, intensity, color);
+    } else
+	CopyColor(scene->settings->background, color);
 }
 
 /* !Render_Scene
@@ -114,7 +124,7 @@ Color_t *Render_Scene(Scene_t *scene, int wres, int hres) {
 	    SubV3f(screenPos, ray.orig, ray.dir);
 	    NormalizeV3f(ray.dir);
 
-	    Trace_Ray(&ray, scene, &render[i + (wres * j)]);
+	    Trace_Ray(&ray, scene, render[i + (wres * j)]);
 	}
     }
     return render;
