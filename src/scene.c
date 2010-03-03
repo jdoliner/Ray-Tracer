@@ -61,13 +61,24 @@ void Trace_Ray(Rayf_t ray, Scene_t *scene, Color_t color, int recursion) {
     int i;
     Intersection_t *intersection = Intersect_Scene(ray, scene);
     if (intersection) {
-	Vec3f_t lightVec;
+	Intersection_t *shadow_test;
 	Color_t diffuse, reflection, final;
 	float intensity = 0;
+
 	for (i = 0; i < scene->nLights; i++) {
-	    SubV3f(scene->light[i]->pos, intersection->point, lightVec);
-	    NormalizeV3f(lightVec);
-	    intensity += Clampf(DotV3f(lightVec, intersection->norm)) * scene->light[i]->intensity;
+	    Rayf_t surfToLight;
+	    Vec3f_t lightVec;
+	    PointstoRayf(intersection->point, scene->light[i]->pos, &surfToLight);
+
+	    shadow_test = Intersect_Scene(surfToLight, scene);
+
+	    if (!shadow_test) {
+		SubV3f(scene->light[i]->pos, intersection->point, lightVec);
+		NormalizeV3f(lightVec);
+		intensity += Clampf(DotV3f(lightVec, intersection->norm)) * scene->light[i]->intensity;
+	    } else {
+		intensity += 0;
+	    }
 	}
 	intensity /= scene->nLights;
 	CopyColor(intersection->material->diffuse_color, diffuse);
@@ -135,7 +146,7 @@ Color_t *Render_Scene(Scene_t *scene, int wres, int hres) {
 	    SubV3f(screenPos, ray.orig, ray.dir);
 	    NormalizeV3f(ray.dir);
 
-	    Trace_Ray(ray, scene, render[i + (wres * j)], 2);
+	    Trace_Ray(ray, scene, render[i + (wres * j)], 10);
 	}
     }
     return render;

@@ -15,7 +15,7 @@
 	<g>165</g>
 	<b>165</b>
       </diffuse_color>
-      <reflection>.5</reflection>
+      <reflection>0.0</reflection>
     </material>
   </geometry>
   <geometry>
@@ -33,7 +33,7 @@
 	<g>165</g>
 	<b>165</b>
       </diffuse_color>
-      <reflection>.5</reflection>
+      <reflection>0.0</reflection>
     </material>
   </geometry>
   <geometry>
@@ -51,7 +51,7 @@
 	<g>165</g>
 	<b>165</b>
       </diffuse_color>
-      <reflection>.5</reflection>
+      <reflection>0.0</reflection>
     </material>
   </geometry>
   <geometry>
@@ -99,7 +99,7 @@
     <intensity>1.0</intensity>
     <pos> 
       <x>4.0</x> 
-      <y>10.0</y> 
+      <y>2.0</y> 
       <z>4.0</z>
     </pos>
     <look_at>
@@ -130,9 +130,9 @@
   </camera>
   <settings>
     <bg_color>
-      <r>45</r>
-      <g>103</g>
-      <b>45</b>
+      <r>15</r>
+      <g>25</g>
+      <b>15</b>
     </bg_color>
   </settings>
 </scene>
