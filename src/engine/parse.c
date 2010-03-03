@@ -108,6 +108,7 @@ Scene_t *Parse_File(const char *fname) {
 	    for (cur2 = cur1->children; cur2; cur2 = cur2->next) {
 		if(!xmlStrcmp(cur2->name, (const xmlChar *) "sphere")) {
 		    scene->geometry[nGeo]->primitive = (Primitive_t *) NEW(Geo_Sphere_t);
+		    scene->geometry[nGeo]->prim_type = SPHERE;
 		    for (cur3 = cur2->children; cur3; cur3 = cur3->next) {
 			if(!xmlStrcmp(cur3->name, (const xmlChar *) "radius")) {
 			    scene->geometry[nGeo]->primitive->sphere.radius = GRAB_FLOAT(cur3);
