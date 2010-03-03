@@ -247,6 +247,19 @@ static inline void CrossV3f (Vec3f_t v1, Vec3f_t v2, Vec3f_t dst)
     dst[2] = z;
 }
 
+/*! \brief reflect 1 vector over a normal vector
+ *  \param v the vector to be reflected
+ *  \param N the normal vector
+ *  \param dst the result vector
+ */
+static inline void ReflectV3f (Vec3f_t v, Vec3f_t N, Vec3f_t dst)
+{
+    Vec3f_t tmp;
+    ScaleV3f(2 * DotV3f(N, v), N, tmp);
+    SubV3f(v, tmp, tmp);
+    CopyV3f(tmp, dst);
+}
+
 //! return a point on a ray
 //! \param r the ray
 //! \param t the distance along the ray
@@ -277,6 +290,19 @@ static inline void ScaleColor (Color_t c, float s, Color_t dst)
     dst[1] = (char) lrint(s * c[1]);
     dst[2] = (char) lrint(s * c[2]);
     dst[3] = c[3];
+}
+
+//! \brief blend 2 colors
+//! \param c1 the first color
+//! \param c2 the second color
+//! \param r the ratio
+//! \param dst the destination color
+static inline void BlendColor (Color_t c1, Color_t c2, float r, Color_t dst)
+{
+    dst[0] = (char) lrint(r * c1[0] + (1 - r) * c2[0]);
+    dst[1] = (char) lrint(r * c1[1] + (1 - r) * c2[1]);
+    dst[2] = (char) lrint(r * c1[2] + (1 - r) * c2[2]);
+    dst[3] = (char) lrint(r * c1[3] + (1 - r) * c2[3]);
 }
 
 #endif /* !_VECTOR_H_ */

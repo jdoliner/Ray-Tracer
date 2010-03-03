@@ -35,12 +35,12 @@ Scene_t *New_Scene(int nGeo, int nLights);
 /* !Intersect_Scene
  * \brief intersect a ray with an entire scene.
  */
-Intersection_t *Intersect_Scene(Rayf_t *ray, Scene_t *scene);
+Intersection_t *Intersect_Scene(Rayf_t ray, Scene_t *scene);
 
 /* !Trace_Ray
  * \brief shoots a ray into a scene and returns the color of the pixel
  */
-void Trace_Ray(Rayf_t *ray, Scene_t *scene, Color_t color);
+void Trace_Ray(Rayf_t ray, Scene_t *scene, Color_t color, int recursion);
 
 /* !Render_Scene
  * \brief Shoots rays in to a scene to evaluate their color and returns them as an hres by vres array

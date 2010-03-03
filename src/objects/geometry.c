@@ -31,11 +31,11 @@ void Calculate_Bbox(Geometry_t *geometry) {
 /* !Intersect
  * \brief intersect a ray with a geometry object
  */
-Intersection_t *Intersect_Geo(Rayf_t *ray, Geometry_t *geometry) {
+Intersection_t *Intersect_Geo(Rayf_t ray, Geometry_t *geometry) {
     /* set up the ray in geometry space */
     Rayf_t geospaceRay;
-    CopyV3f(ray->dir, geospaceRay.dir);
-    CopyV3f(ray->orig, geospaceRay.orig);
+    CopyV3f(ray.dir, geospaceRay.dir);
+    CopyV3f(ray.orig, geospaceRay.orig);
     /* Quatf_t inverseRot;
     InverseQuatf(geometry->rot, inverseRot); */
 

@@ -33,14 +33,14 @@ Scene_t *New_Scene(int nGeo, int nLights) {
 /* !Intersect_Scene
  * \brief intersect a ray with an entire scene.
  */
-Intersection_t *Intersect_Scene(Rayf_t *ray, Scene_t *scene) {
+Intersection_t *Intersect_Scene(Rayf_t ray, Scene_t *scene) {
     int i;
     float t_to_beat = FLT_MAX;
     Intersection_t *candidate = NULL, *answer = NULL;
     for (i = 0; i < scene->nGeo; i++) {
 	candidate = Intersect_Geo(ray, scene->geometry[i]);
 	if (candidate != NULL) {
-	    if (candidate->t < t_to_beat) {
+	    if (candidate->t < t_to_beat && candidate->t > EPSILON) {
 		t_to_beat = candidate->t;
 		if (answer != NULL)
 		    free(answer);
@@ -57,11 +57,12 @@ Intersection_t *Intersect_Scene(Rayf_t *ray, Scene_t *scene) {
 /* !Trace_Ray
  * \brief shoots a ray into a scene and returns the color of the pixel
  */
-void Trace_Ray(Rayf_t *ray, Scene_t *scene, Color_t color) {
+void Trace_Ray(Rayf_t ray, Scene_t *scene, Color_t color, int recursion) {
     int i;
     Intersection_t *intersection = Intersect_Scene(ray, scene);
     if (intersection) {
 	Vec3f_t lightVec;
+	Color_t diffuse, reflection, final;
 	float intensity = 0;
 	for (i = 0; i < scene->nLights; i++) {
 	    SubV3f(scene->light[i]->pos, intersection->point, lightVec);
@@ -69,8 +70,18 @@ void Trace_Ray(Rayf_t *ray, Scene_t *scene, Color_t color) {
 	    intensity += Clampf(DotV3f(lightVec, intersection->norm)) * scene->light[i]->intensity;
 	}
 	intensity /= scene->nLights;
-	CopyColor(intersection->material->diffuse_color, color);
-	ScaleColor(color, intensity, color);
+	CopyColor(intersection->material->diffuse_color, diffuse);
+	ScaleColor(diffuse, intensity, diffuse);
+
+	if (intersection->material->reflection > 0 && recursion > 0) {
+	    Rayf_t reflected_ray;
+	    CopyV3f(intersection->point, reflected_ray.orig);
+	    ReflectV3f(ray.dir, intersection->norm, reflected_ray.dir);
+	    Trace_Ray(reflected_ray, scene, reflection, recursion - 1);
+	}
+	BlendColor(reflection, diffuse, intersection->material->reflection, final);
+	CopyColor(final, color);
+	free(intersection);
     } else
 	CopyColor(scene->settings->background, color);
 }
@@ -124,7 +135,7 @@ Color_t *Render_Scene(Scene_t *scene, int wres, int hres) {
 	    SubV3f(screenPos, ray.orig, ray.dir);
 	    NormalizeV3f(ray.dir);
 
-	    Trace_Ray(&ray, scene, render[i + (wres * j)]);
+	    Trace_Ray(ray, scene, render[i + (wres * j)], 2);
 	}
     }
     return render;

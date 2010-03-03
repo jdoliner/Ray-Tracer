@@ -45,6 +45,6 @@ typedef struct {
 /* !Intersect
  * \brief intersect a ray with a geometry object
  */
-Intersection_t *Intersect_Geo(Rayf_t *ray, Geometry_t *geometry);
+Intersection_t *Intersect_Geo(Rayf_t ray, Geometry_t *geometry);
 
 #endif
