@@ -9,6 +9,7 @@
 #include "primitives/sphere.h"
 #include "primitives/box.h"
 #include "primitives/torus.h"
+#include "primitives/plane.h"
 #include "../engine/defs.h"
 #include "intersection.h"
 
@@ -56,6 +57,9 @@ Intersection_t *Intersect_Geo(Rayf_t ray, Geometry_t *geometry) {
 	    break;
 	case TORUS:
 	    intersection = Intersect_Torus(&geospaceRay, &(geometry->primitive->torus));
+	    break;
+	case PLANE:
+	    intersection = Intersect_Plane(&geospaceRay, &(geometry->primitive->plane));
 	    break;
 	default:
 	    assert(0);

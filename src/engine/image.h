@@ -27,11 +27,11 @@ Image_t *New_Image(int width, int height, Color_t *data);
 /* !Delete_Image
  * \brief free an image point and the associated data array
  */
-void *Delete_Image(Image_t *image);
+void Delete_Image(Image_t *image);
 
 /* !Write_Image
  * \brief print the image out as a ppm file
  */
-int Write_Image(Image_t *image, const char *fname);
+void Write_Image(Image_t *image, const char *fname);
 
 #endif
