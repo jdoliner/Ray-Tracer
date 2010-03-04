@@ -7,8 +7,8 @@
 
 #include <assert.h>
 #include <stdio.h>
-#include <libxml/xmlmemory.h>
-#include <libxml/parser.h>
+#include "libxml/xmlmemory.h"
+#include "libxml/parser.h"
 #include "../scene.h"
 #include "../objects/geometry.h"
 #include "../objects/light.h"
@@ -20,7 +20,9 @@
 #include "vector.h"
 #include "string.h"
 
-#define BAD_TAG(node) 		printf("Ignoring inimplemented tag named: %s\n", node->name)
+#define BAD_TAG(node) 		if (!xmlStrcmp(node->content, (const xmlChar *) "\n ") && \
+					!xmlStrcmp(node->content, (const xmlChar *) "\n")) \
+    					printf("Ignoring inimplemented tag named: %s\n", node->name)
 #define GRAB_FLOAT(node) 	atof((char *)node->children->content)
 #define GRAB_INT(node)		atoi((char *)node->children->content)
 
@@ -106,18 +108,30 @@ Scene_t *Parse_File(const char *fname) {
 	if (!xmlStrcmp(cur1->name, (const xmlChar *) "geometry")) {
 	    scene->geometry[++nGeo] = NEW(Geometry_t);
 	    for (cur2 = cur1->children; cur2; cur2 = cur2->next) {
-		if(!xmlStrcmp(cur2->name, (const xmlChar *) "sphere")) {
+		if (!xmlStrcmp(cur2->name, (const xmlChar *) "sphere")) {
 		    scene->geometry[nGeo]->primitive = (Primitive_t *) NEW(Geo_Sphere_t);
 		    scene->geometry[nGeo]->prim_type = SPHERE;
 		    for (cur3 = cur2->children; cur3; cur3 = cur3->next) {
-			if(!xmlStrcmp(cur3->name, (const xmlChar *) "radius")) {
+			if (!xmlStrcmp(cur3->name, (const xmlChar *) "radius")) {
 			    scene->geometry[nGeo]->primitive->sphere.radius = GRAB_FLOAT(cur3);
 			} else {
 			    BAD_TAG(cur3);
 			}
 		    }
-		} else if(!xmlStrcmp(cur2->name, (const xmlChar *) "box")) {
-		} else if(!xmlStrcmp(cur2->name, (const xmlChar *) "torus")) {
+		} else if (!xmlStrcmp(cur2->name, (const xmlChar *) "box")) {
+		} else if (!xmlStrcmp(cur2->name, (const xmlChar *) "torus")) {
+		} else if (!xmlStrcmp(cur2->name, (const xmlChar *) "plane")) {
+		    scene->geometry[nGeo]->primitive = (Primitive_t *) NEW(Geo_Plane_t);
+		    scene->geometry[nGeo]->prim_type = PLANE;
+		    for (cur3 = cur2->children; cur3; cur3 = cur3->next) {
+			if (!xmlStrcmp(cur3->name, (const xmlChar *) "normal")) {
+			    Parse_Position(cur3, scene->geometry[nGeo]->primitive->plane.N);
+			} else if (!xmlStrcmp(cur3->name, (const xmlChar *) "point")) {
+			    Parse_Position(cur3, scene->geometry[nGeo]->primitive->plane.P);
+			} else {
+			    BAD_TAG(cur3);
+			}
+		    }
 		} else if(!xmlStrcmp(cur2->name, (const xmlChar *) "translation")) {
 		    Parse_Position(cur2, scene->geometry[nGeo]->trans);
 		} else if(!xmlStrcmp(cur2->name, (const xmlChar *) "rotation")) {

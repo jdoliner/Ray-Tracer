@@ -15,20 +15,23 @@
 #include "primitives/sphere.h"
 #include "primitives/box.h"
 #include "primitives/torus.h"
+#include "primitives/plane.h"
 
 /*! the different supported primitives */
 typedef enum {
     SPHERE = 0,
     BOX,
     TORUS,
+    PLANE,
     NUM_PRIMS
 } Prim_Type_t;
 
 /*! abstraction of a primitive */
 typedef union {
-    Geo_Sphere_t 	sphere; 	/*!< a pointer a sphere */
-    Geo_Box_t 		box;		/*!< a pointer a cube*/
-    Geo_Torus_t		torus;		/*!< a pointer a torus*/
+    Geo_Sphere_t 	sphere; 	/*!< a sphere */
+    Geo_Box_t 		box;		/*!< a cube*/
+    Geo_Torus_t		torus;		/*!< a torus*/
+    Geo_Plane_t		plane;		/*!< a plane */
 } Primitive_t;
 
 /*! the struct of a geometry object */
