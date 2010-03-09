@@ -269,6 +269,17 @@ static inline void RayToPointf (Rayf_t *r, float t, Vec3f_t dst)
     ScaledAddV3f (r->orig, t, r->dir, dst);
 }
 
+//! Add two chars clamping for overflow
+//! \param c1 the first char
+//! \param c2 the second char
+static inline unsigned char AddChar (unsigned char a, unsigned char b)
+{
+    if (a > 0xFF - b)
+	return 0xFF;
+    else
+	return a + b;
+}
+
 //! \brief copy a color
 //! \param src the source color
 //! \param dst the destination color
@@ -303,6 +314,17 @@ static inline void BlendColor (Color_t c1, Color_t c2, float r, Color_t dst)
     dst[1] = (char) lrint(r * c1[1] + (1 - r) * c2[1]);
     dst[2] = (char) lrint(r * c1[2] + (1 - r) * c2[2]);
     dst[3] = (char) lrint(r * c1[3] + (1 - r) * c2[3]);
+}
+
+//! \brief add 2 colors clamping to 255
+//! \param c1 the first color
+//! \param c2 the second color
+//! \param dst the destination color
+static inline void SaturatedAddColor (Color_t c1, Color_t c2, Color_t dst)
+{
+    dst[0] = AddChar(c1[0], c2[0]);
+    dst[1] = AddChar(c1[1], c2[1]);
+    dst[2] = AddChar(c1[2], c2[2]);
 }
 
 #endif /* !_VECTOR_H_ */

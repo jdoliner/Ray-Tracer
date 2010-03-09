@@ -62,16 +62,29 @@ void Trace_Ray(Rayf_t ray, Scene_t *scene, Color_t color, int recursion) {
     Intersection_t *intersection = Intersect_Scene(ray, scene);
     if (intersection) {
 	Vec3f_t lightVec;
-	Color_t diffuse, reflection, final;
-	float intensity = 0;
+	Color_t diffuse, reflection, final, spec;
+	float intensity = 0, specIntensity = 0;
 	for (i = 0; i < scene->nLights; i++) {
 	    SubV3f(scene->light[i]->pos, intersection->point, lightVec);
 	    NormalizeV3f(lightVec);
 	    intensity += Clampf(DotV3f(lightVec, intersection->norm)) * scene->light[i]->intensity;
+	    if (intersection->material->spec > 0) {
+		Vec3f_t LrefdN; /* the lightVec reflected over the normal */
+		ReflectV3f(lightVec, intersection->norm, LrefdN);
+		/* NegV3f(LrefdN, LrefdN); */
+
+		NormalizeV3f(ray.dir);
+		specIntensity += pow(Clampf(DotV3f(LrefdN, ray.dir)), intersection->material->spec);
+	    }
 	}
 	intensity /= scene->nLights;
+	specIntensity /= scene->nLights;
+
 	CopyColor(intersection->material->diffuse_color, diffuse);
 	ScaleColor(diffuse, intensity, diffuse);
+
+	spec[0] = spec[1] = spec[2] = spec[3] = 255;
+	ScaleColor(spec, specIntensity, spec);
 
 	if (intersection->material->reflection > 0 && recursion > 0) {
 	    Rayf_t reflected_ray;
@@ -80,6 +93,7 @@ void Trace_Ray(Rayf_t ray, Scene_t *scene, Color_t color, int recursion) {
 	    Trace_Ray(reflected_ray, scene, reflection, recursion - 1);
 	}
 	BlendColor(reflection, diffuse, intersection->material->reflection, final);
+	SaturatedAddColor(final, spec, final);
 	CopyColor(final, color);
 	free(intersection);
     } else
