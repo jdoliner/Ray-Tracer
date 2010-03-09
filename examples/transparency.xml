@@ -6,43 +6,7 @@
     </sphere>
     <translation> 
       <x>0</x> 
-      <y>0</y> 
-      <z>-5.0</z>
-    </translation>
-    <material>
-      <diffuse_color> 
-	<r>235</r> 
-	<g>165</g>
-	<b>165</b>
-      </diffuse_color>
-      <reflection>0.0</reflection>
-    </material>
-  </geometry>
-  <geometry>
-    <sphere>
-      <radius>1.0</radius>
-    </sphere>
-    <translation> 
-      <x>0</x> 
-      <y>0</y> 
-      <z>-2.5</z>
-    </translation>
-    <material>
-      <diffuse_color> 
-	<r>235</r> 
-	<g>165</g>
-	<b>165</b>
-      </diffuse_color>
-      <reflection>0.0</reflection>
-    </material>
-  </geometry>
-  <geometry>
-    <sphere>
-      <radius>1.0</radius>
-    </sphere>
-    <translation> 
-      <x>0</x> 
-      <y>0</y> 
+      <y>1.0</y> 
       <z>0</z>
     </translation>
     <material>
@@ -52,42 +16,37 @@
 	<b>165</b>
       </diffuse_color>
       <reflection>0.0</reflection>
+      <transparency>.5</transparency>
+      <refraction>.6</refraction>
     </material>
   </geometry>
   <geometry>
-    <sphere>
-      <radius>1.0</radius>
-    </sphere>
+    <plane>
+      <normal>
+      	<x>0.0</x>
+      	<y>1.0</y>
+      	<z>0.0</z>
+      </normal>
+      <point>
+      	<x>0.0</x>
+      	<y>0.0</y>
+      	<z>0.0</z>
+      </point>
+    </plane>
     <translation> 
       <x>0</x> 
       <y>0</y> 
-      <z>2.5</z>
+      <z>0</z>
     </translation>
     <material>
       <diffuse_color> 
-	<r>235</r> 
-	<g>165</g>
+	<r>165</r> 
+	<g>235</g>
 	<b>165</b>
       </diffuse_color>
-      <reflection>.5</reflection>
-    </material>
-  </geometry>
-  <geometry>
-    <sphere>
-      <radius>1.0</radius>
-    </sphere>
-    <translation> 
-      <x>0</x> 
-      <y>0</y> 
-      <z>5.0</z>
-    </translation>
-    <material>
-      <diffuse_color> 
-	<r>235</r> 
-	<g>165</g>
-	<b>165</b>
-      </diffuse_color>
-      <reflection>.5</reflection>
+      <reflection>0.0</reflection>
+      <transparency>0.0</transparency>
+      <refraction>1.0</refraction>
     </material>
   </geometry>
   <light>
@@ -99,7 +58,7 @@
     <intensity>1.0</intensity>
     <pos> 
       <x>4.0</x> 
-      <y>2.0</y> 
+      <y>10.0</y> 
       <z>4.0</z>
     </pos>
     <look_at>
@@ -110,8 +69,8 @@
   </light>
   <camera>
     <pos> 
-      <x>10.0</x>
-      <y>0.0</y>
+      <x>5.0</x>
+      <y>2.0</y>
       <z>0.0</z>
     </pos>
     <look_at> 
@@ -130,9 +89,9 @@
   </camera>
   <settings>
     <bg_color>
-      <r>15</r>
-      <g>25</g>
-      <b>15</b>
+      <r>45</r>
+      <g>103</g>
+      <b>45</b>
     </bg_color>
   </settings>
 </scene>

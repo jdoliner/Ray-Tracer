@@ -269,6 +269,17 @@ static inline void RayToPointf (Rayf_t *r, float t, Vec3f_t dst)
     ScaledAddV3f (r->orig, t, r->dir, dst);
 }
 
+//! make a ray: p1------p2-->
+//! \param p1 the first point
+//! \param p2 the second point
+//! \param dst the destination ray
+static inline void PointstoRayf (Vec3f_t p1, Vec3f_t p2, Rayf_t *dst)
+{
+    CopyV3f(p1, dst->orig);
+    SubV3f(p2, p1, dst->dir);
+    NormalizeV3f(dst->dir);
+}
+
 //! Add two chars clamping for overflow
 //! \param c1 the first char
 //! \param c2 the second char

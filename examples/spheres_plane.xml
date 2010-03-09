@@ -15,7 +15,7 @@
 	<g>165</g>
 	<b>165</b>
       </diffuse_color>
-      <reflection>0.0</reflection>
+      <reflection>.1</reflection>
       <spec>3.0</spec>
     </material>
   </geometry>
