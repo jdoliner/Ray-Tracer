@@ -16,6 +16,9 @@ typedef struct {
     Vec3f_t		point;		/*!< the point of intersection */
     Vec3f_t		norm;		/*!< the normal of the object at the point of intersection */
     Material_t		*material;	/*!< the geometry object we hit */
+    float		u;		/*!< the u parameter */
+    float		v;		/*!< the v parameter */
+    struct Geometry_t	*geo;		/*!< the geometry we hit */
 } Intersection_t;
 
 #endif
