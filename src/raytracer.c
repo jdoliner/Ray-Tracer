@@ -10,8 +10,7 @@ int main (int argc, char *argv[]) {
 
     Scene_t *scene;
 
-    /* scene = Parse_File(argv[1]); */
-    scene = Parse_File("../examples/5spheres.xml"); 
+    scene = Parse_File(argv[1]);
 
     int width = 1024, height = 1024;
     Color_t *render = Render_Scene(scene, width, height);

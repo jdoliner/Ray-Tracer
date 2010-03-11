@@ -61,7 +61,6 @@ void Trace_Ray(Rayf_t ray, Scene_t *scene, Color_t color, int recursion) {
     int i;
     Intersection_t *intersection = Intersect_Scene(ray, scene);
     if (intersection) {
-/* <<<<<<< HEAD:src/scene.c */
 	Intersection_t *shadow_test;
 	Rayf_t surfToLight;
 	Vec3f_t lightVec;
