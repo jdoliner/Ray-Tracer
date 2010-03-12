@@ -43,11 +43,84 @@ typedef struct {
     Material_t		*material; 	/*!< information about how to render the object */
     Prim_Type_t		prim_type;	/*!< what type of primitive we have */ 
     Primitive_t		*primitive;	/*!< what point to the object primitive */
+    struct Rex_t	*diffuse;	/*!< the diffuse rex */
+    struct Rex_t	*specular[];	/*!< the specular rex */
 } Geometry_t;
+
+/*! types for QUADTREE node types */
+typedef enum {
+    LEAF = 0,
+    TREE,
+    NUM_NODES
+} Rex_Type_t;
+
+/*! radiosity texture leaf */
+typedef struct {
+    Color_t	**value;		/*!< array of lighting values */
+    Vec3f_t	**vec;			/*!< array of vectors (only used for spec maps) */
+    int		**nSamples;		/*!< number of samples at each point */
+    int 	resolution;		/*!< the resolution of the rex */
+} Rex_t;
 
 /* !Intersect
  * \brief intersect a ray with a geometry object
  */
 Intersection_t *Intersect_Geo(Rayf_t ray, Geometry_t *geometry);
+
+/* !GetIndex_Rex
+ * \brief convert a paramter into an index
+ * \param rex the rex in question
+ * \param p the parameter we're using
+ */
+static inline int GetIndex_Rex(Rex_t *rex, float p) {
+    int i = lrint(rex->resolution * p);
+    if (i == rex->resolution)
+	i--;
+
+    return i;
+}
+
+/* !Init_Rex
+ * \brief rex pointer to the rex to initiate
+ * \brief resolution the resolution of the rex
+ */
+void Init_Rex(Rex_t *rex, int resolution);
+
+/* !CatchSpec_Rex
+ * \brief evaluate a rex for spec at parameter
+ * \param Rex_t *rex the rex to evaluate
+ * \param u the u parameter
+ * \param v the v parameter
+ * \param the vector we're viewing along
+ * \param dst output color
+ */
+void CatchSpec_Rex(Rex_t *rex, float u, float v, Vec3f_t vec, Color_t dst);
+
+/* !CatchDiffuse_Rex
+ * \brief evaluate a rex for diffuse at a parameter
+ * \param Rex_t *rex the rex to evaluate
+ * \param u the u parameter
+ * \param v the v parameter
+ */
+void CatchDiffuse_Rex(Rex_t *rex, float u, float v, Vec3f_t vec, Color_t dst);
+
+/* !ThrowSpec_Rex
+ * \brief Throw a ray onto a rex
+ * \param Rex_t *rex the rex to use
+ * \param float u the u parameter
+ * \param float v the v parameter
+ * \param Vec3f_t vec the vector along which the spec intensity is maximal
+ * \param Color_t color the color of the spec ray
+ */
+void ThrowSpec_Rex(Rex_t *rex, float u, float v, Vec3f_t vec, Color_t color);
+
+/* !ThrowDiffuse_Rex
+ * \brief Throw a ray onto a rex
+ * \param Rex_t *rex the rex to use
+ * \param float u the u parameter
+ * \param float v the v parameter
+ * \param Color_t color the diffuse color at this parameter
+ */
+void ThrowDiffuse_Rex(Rex_t *rex, float u, float v, Color_t color);
 
 #endif

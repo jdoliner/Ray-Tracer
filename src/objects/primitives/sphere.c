@@ -42,6 +42,10 @@ Intersection_t *Intersect_Sphere(Rayf_t *ray, Geo_Sphere_t *sphere) {
 	CopyV3f(intersection->point, intersection->norm);
 	NormalizeV3f(intersection->norm);
 
+	/* compute texture coordinates */
+	intersection->u = (intersection->norm[0] + 1) / 2;
+	intersection->v = (intersection->norm[1] + 1) / 2;
+
 	return intersection;
     }
 

@@ -260,6 +260,7 @@ static inline void ReflectV3f (Vec3f_t v, Vec3f_t N, Vec3f_t dst)
     CopyV3f(tmp, dst);
 }
 
+<<<<<<< HEAD:src/engine/vector.h
 /* \brief compute the refracted vector
  * \param N the normal vector
  * \param L the incident vector
@@ -290,6 +291,26 @@ static inline void RefractV3f (Vec3f_t L, Vec3f_t N, float nL, float nT, Vec3f_t
     }
 }
 
+/*! \brief projection of vector u along vector v
+ *  \param u vector u
+ *  \param v vector v
+ *  \param dst the resulting vector
+ */
+static inline void ProjectV3f(Vec3f_t u, Vec3f_t v, Vec3f_t dst) {
+    CopyV3f(v, dst);
+    ScaleV3f(DotV3f(u, v), dst, dst);
+}
+
+/*! \brief check if two vectors are parallel
+ *  \param u first vector
+ *  \param v second vector
+ */
+static inline char ParallelV3f (Vec3f_t u, Vec3f_t v) {
+    Vec3f_t X;
+    CrossV3f(u, v, X);
+    return (LengthV3f(X) < EPSILON);
+}
+
 //! return a point on a ray
 //! \param r the ray
 //! \param t the distance along the ray
@@ -308,6 +329,17 @@ static inline void PointstoRayf (Vec3f_t p1, Vec3f_t p2, Rayf_t *dst)
     CopyV3f(p1, dst->orig);
     SubV3f(p2, p1, dst->dir);
     NormalizeV3f(dst->dir);
+}
+
+//! Add two chars clamping for overflow
+//! \param c1 the first char
+//! \param c2 the second char
+static inline unsigned char AddChar (unsigned char a, unsigned char b)
+{
+    if (a > 0xFF - b)
+	return 0xFF;
+    else
+	return a + b;
 }
 
 //! \brief copy a color
@@ -344,6 +376,17 @@ static inline void BlendColor (Color_t c1, Color_t c2, float r, Color_t dst)
     dst[1] = (char) lrint(r * c1[1] + (1 - r) * c2[1]);
     dst[2] = (char) lrint(r * c1[2] + (1 - r) * c2[2]);
     dst[3] = (char) lrint(r * c1[3] + (1 - r) * c2[3]);
+}
+
+//! \brief add 2 colors clamping to 255
+//! \param c1 the first color
+//! \param c2 the second color
+//! \param dst the destination color
+static inline void SaturatedAddColor (Color_t c1, Color_t c2, Color_t dst)
+{
+    dst[0] = AddChar(c1[0], c2[0]);
+    dst[1] = AddChar(c1[1], c2[1]);
+    dst[2] = AddChar(c1[2], c2[2]);
 }
 
 #endif /* !_VECTOR_H_ */
