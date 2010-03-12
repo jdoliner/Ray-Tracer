@@ -16,8 +16,9 @@ typedef struct {
     Color_t	spec_color;	/* !< specular color */
     float	spec;		/* !< how specular the object is */
     float	glossiness;	/* !< the exponent for the specular highlights */
-    float	transperancy;	/* !< transparency in [0, 1] */
+    float	transparency;	/* !< transparency in [0, 1] */
     float	reflection;	/* !< reflection in [0, 1] */
+    float	refraction;	/* !< refraction index in [0, 1] */
 } Material_t;
 
 #endif

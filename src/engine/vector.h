@@ -17,7 +17,7 @@
 #include <math.h>
 
 /*! \brief a small value for testing if something is close to 0 */
-#define EPSILON 1e-6
+#define EPSILON 1e-3
 
 typedef float		Vec2f_t[2];	//!< 2D vector (used for texture coords)
 typedef float		Vec3f_t[3];	//!< 3D vector
@@ -258,6 +258,36 @@ static inline void ReflectV3f (Vec3f_t v, Vec3f_t N, Vec3f_t dst)
     ScaleV3f(2 * DotV3f(N, v), N, tmp);
     SubV3f(v, tmp, tmp);
     CopyV3f(tmp, dst);
+}
+
+/* \brief compute the refracted vector
+ * \param N the normal vector
+ * \param L the incident vector
+ * \param nL the refraction index in medium L
+ * \param nT the refraction index in mediuk T
+ * \param dst the destination vector
+ *               \   ^
+ *              L \  |N
+ *                 \ |
+ *     nL           v|
+ * ---------------------------------------
+ *     nT            |\
+ *                 -N| \T
+ *                   |  \
+ *                   v   v
+ */
+static inline void RefractV3f (Vec3f_t L, Vec3f_t N, float nL, float nT, Vec3f_t dst)
+{
+    if ((1 - (Sqrf(nL) / Sqrf(nT) * (1 - Sqrf(DotV3f(N, L))))) < 0) {
+	ReflectV3f(L, N, dst);
+    } else {
+	dst[0] = dst[1] = dst[2] = 0.0f;
+	float NScale, LScale;
+	NScale = ((nL / nT) * -DotV3f(N, L)) - sqrt(1 - (Sqrf(nL) / Sqrf(nT) * (1 - Sqrf(-DotV3f(N, L)))));
+	LScale = nL / nT;
+	ScaledAddV3f(dst, NScale, N, dst);
+	ScaledAddV3f(dst, LScale, L, dst);
+    }
 }
 
 //! return a point on a ray

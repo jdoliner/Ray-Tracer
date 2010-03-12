@@ -147,10 +147,12 @@ Scene_t *Parse_File(const char *fname) {
 			    scene->geometry[nGeo]->material->spec = GRAB_FLOAT(cur3);
 			} else if(!xmlStrcmp(cur3->name, (const xmlChar *) "glossiness")) {
 			    scene->geometry[nGeo]->material->glossiness = GRAB_FLOAT(cur3);
-			} else if(!xmlStrcmp(cur3->name, (const xmlChar *) "transperancy")) {
-			    scene->geometry[nGeo]->material->transperancy = GRAB_FLOAT(cur3);
+			} else if(!xmlStrcmp(cur3->name, (const xmlChar *) "transparency")) {
+			    scene->geometry[nGeo]->material->transparency = GRAB_FLOAT(cur3);
 			} else if(!xmlStrcmp(cur3->name, (const xmlChar *) "reflection")) {
 			    scene->geometry[nGeo]->material->reflection = GRAB_FLOAT(cur3);
+			} else if(!xmlStrcmp(cur3->name, (const xmlChar *) "refraction")) {
+			    scene->geometry[nGeo]->material->refraction = GRAB_FLOAT(cur3);
 			} else {
 			    BAD_TAG(cur3);
 			}

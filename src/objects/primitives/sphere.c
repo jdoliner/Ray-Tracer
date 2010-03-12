@@ -25,8 +25,12 @@ Intersection_t *Intersect_Sphere(Rayf_t *ray, Geo_Sphere_t *sphere) {
 	 * if both are negative the sphere is behind the ray
 	 * either way there's no intersection
 	 */
-	if (t1 <= 0 || t2 <= 0)
+	if (t1 <= EPSILON || t2 <= EPSILON)
 	    return NULL;
+	else if (t1 <= EPSILON)
+	    t = t2;
+	else if (t2 <= EPSILON)
+	    t = t1;
 	else
 	    t = Minf(t1, t2);
 

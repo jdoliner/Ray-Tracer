@@ -62,9 +62,10 @@ void Trace_Ray(Rayf_t ray, Scene_t *scene, Color_t color, int recursion) {
     Intersection_t *intersection = Intersect_Scene(ray, scene);
     if (intersection) {
 	Intersection_t *shadow_test;
-	Color_t diffuse, reflection, final;
+	Color_t diffuse, reflection, transparency, final;
 	float intensity = 0;
 
+	/* compute diffuse value */
 	for (i = 0; i < scene->nLights; i++) {
 	    Rayf_t surfToLight;
 	    Vec3f_t lightVec;
@@ -84,14 +85,35 @@ void Trace_Ray(Rayf_t ray, Scene_t *scene, Color_t color, int recursion) {
 	CopyColor(intersection->material->diffuse_color, diffuse);
 	ScaleColor(diffuse, intensity, diffuse);
 
+	/* compute reflection value */
 	if (intersection->material->reflection > 0 && recursion > 0) {
 	    Rayf_t reflected_ray;
 	    CopyV3f(intersection->point, reflected_ray.orig);
 	    ReflectV3f(ray.dir, intersection->norm, reflected_ray.dir);
 	    Trace_Ray(reflected_ray, scene, reflection, recursion - 1);
 	}
-	BlendColor(reflection, diffuse, intersection->material->reflection, final);
-	CopyColor(final, color);
+
+	/* compute transparency value */
+	if (intersection->material->transparency > 0) {
+	    Rayf_t refracted_ray;
+	    CopyV3f(intersection->point, refracted_ray.orig);
+
+	    if (DotV3f(ray.dir, intersection->norm) <= 0) {
+		/* frontside intersection */
+		RefractV3f(ray.dir, intersection->norm, 1.0, intersection->material->refraction, refracted_ray.dir);
+		Trace_Ray(refracted_ray, scene, transparency, recursion - 1);
+	    } else {
+		/* backside intersection */
+		Vec3f_t neg_normal;
+		NegV3f(intersection->norm, neg_normal);
+		RefractV3f(ray.dir, neg_normal, 1.0, intersection->material->refraction, refracted_ray.dir);
+		Trace_Ray(refracted_ray, scene, transparency, recursion - 1);
+	    }
+	}
+	Color_t emission; /* blending of transparency and diffuse */
+	BlendColor(transparency, diffuse, intersection->material->transparency, emission);
+	BlendColor(reflection, emission, intersection->material->reflection, final);
+	CopyColor(emission, color);
 	free(intersection);
     } else
 	CopyColor(scene->settings->background, color);

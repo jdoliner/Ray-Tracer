@@ -16,6 +16,8 @@
 	<b>165</b>
       </diffuse_color>
       <reflection>0.0</reflection>
+      <transparency>0.0</transparency>
+      <refraction>1.0</refraction>
     </material>
   </geometry>
   <geometry>
@@ -34,6 +36,8 @@
 	<b>165</b>
       </diffuse_color>
       <reflection>0.0</reflection>
+      <transparency>0.0</transparency>
+      <refraction>1.0</refraction>
     </material>
   </geometry>
   <geometry>
@@ -52,6 +56,8 @@
 	<b>165</b>
       </diffuse_color>
       <reflection>0.0</reflection>
+      <transparency>0.0</transparency>
+      <refraction>1.0</refraction>
     </material>
   </geometry>
   <geometry>
@@ -70,6 +76,8 @@
 	<b>165</b>
       </diffuse_color>
       <reflection>.5</reflection>
+      <transparency>0.0</transparency>
+      <refraction>1.0</refraction>
     </material>
   </geometry>
   <geometry>
@@ -88,6 +96,8 @@
 	<b>165</b>
       </diffuse_color>
       <reflection>.5</reflection>
+      <transparency>0.0</transparency>
+      <refraction>1.0</refraction>
     </material>
   </geometry>
   <light>
