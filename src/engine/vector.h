@@ -260,6 +260,26 @@ static inline void ReflectV3f (Vec3f_t v, Vec3f_t N, Vec3f_t dst)
     CopyV3f(tmp, dst);
 }
 
+/*! \brief projection of vector u along vector v
+ *  \param u vector u
+ *  \param v vector v
+ *  \param dst the resulting vector
+ */
+static inline void ProjectV3f(Vec3f_t u, Vec3f_t v, Vec3f_t dst) {
+    CopyV3f(v, dst);
+    ScaleV3f(DotV3f(u, v), dst, dst);
+}
+
+/*! \brief check if two vectors are parallel
+ *  \param u first vector
+ *  \param v second vector
+ */
+static inline char ParallelV3f (Vec3f_t u, Vec3f_t v) {
+    Vec3f_t X;
+    CrossV3f(u, v, X);
+    return (LengthV3f(X) < EPSILON);
+}
+
 //! return a point on a ray
 //! \param r the ray
 //! \param t the distance along the ray

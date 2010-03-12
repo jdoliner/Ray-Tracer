@@ -43,6 +43,8 @@ typedef struct {
     Material_t		*material; 	/*!< information about how to render the object */
     Prim_Type_t		prim_type;	/*!< what type of primitive we have */ 
     Primitive_t		*primitive;	/*!< what point to the object primitive */
+    struct Rex_t	*diffuse;	/*!< the diffuse rex */
+    struct Rex_t	*specular[];	/*!< the specular rex */
 } Geometry_t;
 
 /*! types for QUADTREE node types */
