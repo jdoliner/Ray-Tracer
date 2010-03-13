@@ -42,6 +42,18 @@ Intersection_t *Intersect_Scene(Rayf_t ray, Scene_t *scene);
  */
 void Trace_Ray(Rayf_t ray, Scene_t *scene, Color_t color, int recursion);
 
+/* !Calculate_Rex
+ * \brief Use monte-carlo technique to compute each surfaces illumination
+ * \param scene the scene we're computing rexes for
+ * \param resolution the resolution of the scene
+ * \param accuracy how many rays to use in calculating the illumination
+ */
+void Caclulate_Rex(Scene_t *scene, int resolution, int accuracy);
+
+#define rex_perturb 	0.2f	/*!< how much to jiggle the light ray when calculating rexs */		
+#define rex_recursion 	5	/*!< how many times to let the rex bounce */
+#define rex_cascade	100	/*!< how much the rays should cascade through the scene */
+
 /* !Render_Scene
  * \brief Shoots rays in to a scene to evaluate their color and returns them as an hres by vres array
  * \param scene the scene to be rendered

@@ -18,7 +18,7 @@ typedef struct {
     Material_t		*material;	/*!< the geometry object we hit */
     float		u;		/*!< the u parameter */
     float		v;		/*!< the v parameter */
-    struct Geometry_t	*geo;		/*!< the geometry we hit */
+    void		*geo;		/*!< the geometry we hit */
 } Intersection_t;
 
 #endif

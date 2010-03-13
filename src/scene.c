@@ -8,9 +8,9 @@
 /*! \brief intersect a ray with an entire scene
  */
 
-#include "objects/geometry.h"
 #include "objects/light.h"
 #include "objects/intersection.h"
+#include "objects/geometry.h"
 #include "engine/vector.h"
 #include "scene.h"
 #include <float.h>
@@ -61,22 +61,19 @@ void Trace_Ray(Rayf_t ray, Scene_t *scene, Color_t color, int recursion) {
     int i;
     Intersection_t *intersection = Intersect_Scene(ray, scene);
     if (intersection) {
-	Intersection_t *shadow_test;
 	/* compute diffuse value */
 	Rayf_t surfToLight;
 	Vec3f_t lightVec;
-	Color_t diffuse, reflection, final, spec;
+	Color_t diffuse, reflection, transparency, final, spec;
 	float intensity = 0, specIntensity = 0;
 	for (i = 0; i < scene->nLights; i++) {
-
+	    /* compute the lightVec */
 	    SubV3f(scene->light[i]->pos, intersection->point, lightVec);
 	    NormalizeV3f(lightVec);
 
 	    PointstoRayf(intersection->point, scene->light[i]->pos, &surfToLight);
 
-	    shadow_test = Intersect_Scene(surfToLight, scene);
-
-	    if (!shadow_test) {
+	    if (!Intersect_Scene(surfToLight, scene)) {
 		intensity += Clampf(DotV3f(lightVec, intersection->norm)) * scene->light[i]->intensity;
 		if (intersection->material->spec > 0) {
 		    Vec3f_t LrefdN; /* the lightVec reflected over the normal */
@@ -96,20 +93,16 @@ void Trace_Ray(Rayf_t ray, Scene_t *scene, Color_t color, int recursion) {
 	CopyColor(intersection->material->diffuse_color, diffuse);
 	ScaleColor(diffuse, intensity, diffuse);
 
-<<<<<<< HEAD:src/scene.c
 	/* compute reflection value */
-=======
 	spec[0] = spec[1] = spec[2] = spec[3] = 255;
 	ScaleColor(spec, specIntensity, spec);
 
->>>>>>> 07b7ef4b1c8b19c664dd52b4cb8fee088a098c79:src/scene.c
 	if (intersection->material->reflection > 0 && recursion > 0) {
 	    Rayf_t reflected_ray;
 	    CopyV3f(intersection->point, reflected_ray.orig);
 	    ReflectV3f(ray.dir, intersection->norm, reflected_ray.dir);
 	    Trace_Ray(reflected_ray, scene, reflection, recursion - 1);
 	}
-<<<<<<< HEAD:src/scene.c
 
 	/* compute transparency value */
 	if (intersection->material->transparency > 0) {
@@ -132,14 +125,59 @@ void Trace_Ray(Rayf_t ray, Scene_t *scene, Color_t color, int recursion) {
 	BlendColor(transparency, diffuse, intersection->material->transparency, emission);
 	BlendColor(reflection, emission, intersection->material->reflection, final);
 	CopyColor(emission, color);
-=======
-	BlendColor(reflection, diffuse, intersection->material->reflection, final);
 	SaturatedAddColor(final, spec, final);
 	CopyColor(final, color);
->>>>>>> 07b7ef4b1c8b19c664dd52b4cb8fee088a098c79:src/scene.c
 	free(intersection);
     } else
 	CopyColor(scene->settings->background, color);
+}
+
+/* !ThrowRay_Scene
+ * \brief throw a ray into a scene and add it to the correct rexes
+ * \param scene the scene
+ * \param ray the ray we're throwing
+ * \param color the color of the ray
+ * \param how many times to let the rays bounce
+ * \param the index of the light the ray is from
+ */
+Intersection_t *ThrowRay_Scene(Scene_t *scene, Rayf_t ray, Color_t color, int lIndex) {
+    Intersection_t *intersection = Intersect_Scene(ray, scene);
+    if (intersection) {
+	ThrowDiffuse_Rex(( (Geometry_t *) intersection->geo)->diffuse_rex, intersection->u, intersection->v, color);
+	ThrowSpec_Rex(( (Geometry_t *) intersection->geo)->specular_rex[lIndex], intersection->u, intersection->v, ray.dir, color);
+    }
+
+    return intersection;
+}
+
+/* !Calculate_Rex
+ * \brief Use monte-carlo technique to compute each surfaces illumination
+ * \param scene the scene we're computing rexes for
+ * \param resolution the resolution of the scene
+ * \param accuracy how many rays to use in calculating the illumination
+ */
+void Calculate_Rex(Scene_t *scene, int resolution, int accuracy) {
+    int i, j;
+
+    /* allocate the rexes */
+    for (i = 0; i < scene->nGeo; i++) {
+	scene->geometry[i]->diffuse_rex = NEW(Rex_t);
+	Init_Rex(scene->geometry[i]->diffuse_rex, resolution);
+
+	scene->geometry[i]->specular_rex = NEWVEC(Rex_t *, scene->nLights);
+	for (j = 0; j < scene->nLights; j++) {
+		scene->geometry[i]->specular_rex[j] = NEW(Rex_t);
+		Init_Rex(scene->geometry[i]->specular_rex[j], resolution);
+	}
+    }
+
+    for (i = 0; i < scene->nLights; i++) {
+	Rayf_t lightRay;
+	PointstoRayf(scene->light[i]->pos, scene->light[i]->look_at, &lightRay);
+	Vec3f_t perturb;
+	RandomV3f(perturb);
+	ScaledAddV3f(lightRay.dir, .2, perturb, lightRay.dir);
+    }
 }
 
 /* !Render_Scene

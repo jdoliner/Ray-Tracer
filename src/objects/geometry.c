@@ -125,7 +125,7 @@ void CatchSpec_Rex(Rex_t *rex, float u, float v, Vec3f_t vec, Color_t dst) {
  * \param u the u parameter
  * \param v the v parameter
  */
-void CatchDiffuse_Rex(Rex_t *rex, float u, float v, Vec3f_t vec, Color_t dst) {
+void CatchDiffuse_Rex(Rex_t *rex, float u, float v, Color_t dst) {
     int i = GetIndex_Rex(rex, u), j = GetIndex_Rex(rex, v);
 
     CopyColor(rex->value[i][j], dst);

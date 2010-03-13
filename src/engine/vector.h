@@ -15,6 +15,8 @@
 #define _VECTOR_H_
 
 #include <math.h>
+#include <stdlib.h>
+#include <time.h>
 
 /*! \brief a small value for testing if something is close to 0 */
 #define EPSILON 1e-3
@@ -260,7 +262,6 @@ static inline void ReflectV3f (Vec3f_t v, Vec3f_t N, Vec3f_t dst)
     CopyV3f(tmp, dst);
 }
 
-<<<<<<< HEAD:src/engine/vector.h
 /* \brief compute the refracted vector
  * \param N the normal vector
  * \param L the incident vector
@@ -296,7 +297,8 @@ static inline void RefractV3f (Vec3f_t L, Vec3f_t N, float nL, float nT, Vec3f_t
  *  \param v vector v
  *  \param dst the resulting vector
  */
-static inline void ProjectV3f(Vec3f_t u, Vec3f_t v, Vec3f_t dst) {
+static inline void ProjectV3f(Vec3f_t u, Vec3f_t v, Vec3f_t dst) 
+{
     CopyV3f(v, dst);
     ScaleV3f(DotV3f(u, v), dst, dst);
 }
@@ -305,10 +307,27 @@ static inline void ProjectV3f(Vec3f_t u, Vec3f_t v, Vec3f_t dst) {
  *  \param u first vector
  *  \param v second vector
  */
-static inline char ParallelV3f (Vec3f_t u, Vec3f_t v) {
+static inline char ParallelV3f (Vec3f_t u, Vec3f_t v) 
+{
     Vec3f_t X;
     CrossV3f(u, v, X);
     return (LengthV3f(X) < EPSILON);
+}
+
+/*! \brief make a random vector
+ *  \param dst the destination vector
+ */
+static inline void RandomV3f (Vec3f_t dst)
+{
+    srand(time(NULL));
+    int i;
+    for (i = 0; i < 3; i++) {
+	dst[i] = (float)rand() / (float)RAND_MAX;
+	dst[i] *= 2;
+	dst[i] -= 1;
+    }
+
+    NormalizeV3f(dst);
 }
 
 //! return a point on a ray

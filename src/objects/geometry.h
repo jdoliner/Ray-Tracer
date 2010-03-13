@@ -34,6 +34,14 @@ typedef union {
     Geo_Plane_t		plane;		/*!< a plane */
 } Primitive_t;
 
+/*! radiosity texture */
+typedef struct {
+    Color_t	**value;		/*!< array of lighting values */
+    Vec3f_t	**vec;			/*!< array of vectors (only used for spec maps) */
+    int		**nSamples;		/*!< number of samples at each point */
+    int 	resolution;		/*!< the resolution of the rex */
+} Rex_t;
+
 /*! the struct of a geometry object */
 typedef struct {
     Vec3f_t		scale;		/*!< scaling along the objects x,y,z coordinates */
@@ -43,24 +51,9 @@ typedef struct {
     Material_t		*material; 	/*!< information about how to render the object */
     Prim_Type_t		prim_type;	/*!< what type of primitive we have */ 
     Primitive_t		*primitive;	/*!< what point to the object primitive */
-    struct Rex_t	*diffuse;	/*!< the diffuse rex */
-    struct Rex_t	*specular[];	/*!< the specular rex */
+    Rex_t		*diffuse_rex;	/*!< the diffuse rex */
+    Rex_t		**specular_rex;	/*!< the specular rex */
 } Geometry_t;
-
-/*! types for QUADTREE node types */
-typedef enum {
-    LEAF = 0,
-    TREE,
-    NUM_NODES
-} Rex_Type_t;
-
-/*! radiosity texture leaf */
-typedef struct {
-    Color_t	**value;		/*!< array of lighting values */
-    Vec3f_t	**vec;			/*!< array of vectors (only used for spec maps) */
-    int		**nSamples;		/*!< number of samples at each point */
-    int 	resolution;		/*!< the resolution of the rex */
-} Rex_t;
 
 /* !Intersect
  * \brief intersect a ray with a geometry object
@@ -101,8 +94,9 @@ void CatchSpec_Rex(Rex_t *rex, float u, float v, Vec3f_t vec, Color_t dst);
  * \param Rex_t *rex the rex to evaluate
  * \param u the u parameter
  * \param v the v parameter
+ * \param dst output color
  */
-void CatchDiffuse_Rex(Rex_t *rex, float u, float v, Vec3f_t vec, Color_t dst);
+void CatchDiffuse_Rex(Rex_t *rex, float u, float v, Color_t dst);
 
 /* !ThrowSpec_Rex
  * \brief Throw a ray onto a rex
