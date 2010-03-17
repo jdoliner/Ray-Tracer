@@ -195,8 +195,12 @@ Scene_t *Parse_File(const char *fname) {
 	    }
 	} else if (!xmlStrcmp(cur1->name, (const xmlChar *) "settings")) {
 	     for (cur2 = cur1->children; cur2; cur2 = cur2->next) {
-		if(!xmlStrcmp(cur2->name, (const xmlChar *) "bg_color")) {
+		if (!xmlStrcmp(cur2->name, (const xmlChar *) "bg_color")) {
 		    Parse_Color(cur2, scene->settings->background);
+		} else if (!xmlStrcmp(cur2->name, (const xmlChar *) "radiosity")) {
+		    scene->settings->radiosity = GRAB_INT(cur2);
+		} else if (!xmlStrcmp(cur2->name, (const xmlChar *) "rad_accuracy")) {
+		    scene->settings->rad_accuracy = GRAB_INT(cur2);
 		} else {
 		    BAD_TAG(cur2);
 		}

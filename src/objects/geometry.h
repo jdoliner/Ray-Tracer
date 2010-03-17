@@ -117,4 +117,11 @@ void ThrowSpec_Rex(Rex_t *rex, float u, float v, Vec3f_t vec, Color_t color);
  */
 void ThrowDiffuse_Rex(Rex_t *rex, float u, float v, Color_t color);
 
+/* !Output_Rex
+ * \brief drop a rex into an image
+ * \param Rex_t *rex the rex to use
+ * \param const char * fname the file name to output to
+ */
+void Output_Rex(Rex_t *rex, const char * fname);
+
 #endif

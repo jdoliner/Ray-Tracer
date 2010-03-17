@@ -15,6 +15,8 @@
 /*! \brief settings for a scene */
 typedef struct {
     Color_t		background;	/*!< the background color of the scene */
+    char		radiosity;	/*!< whether or not to use radiosity */
+    int			rad_accuracy;	/*!< how many rays to use in the radiosity calculation */
 } Settings_t;
 
 /*! \brief a scene */
@@ -50,8 +52,8 @@ void Trace_Ray(Rayf_t ray, Scene_t *scene, Color_t color, int recursion);
  */
 void Caclulate_Rex(Scene_t *scene, int resolution, int accuracy);
 
-#define rex_perturb 	0.2f	/*!< how much to jiggle the light ray when calculating rexs */		
-#define rex_recursion 	5	/*!< how many times to let the rex bounce */
+#define rex_perturb 	0.95f	/*!< how much to jiggle the light ray when calculating rexs */		
+#define rex_recursion 	1	/*!< how many times to let the rex bounce */
 #define rex_cascade	100	/*!< how much the rays should cascade through the scene */
 
 /* !Render_Scene

@@ -15,6 +15,7 @@
 #include "scene.h"
 #include <float.h>
 #include <assert.h>
+#include <stdio.h>
 
 /* !New_Scene
  * \brief Allocate all the space needed for a scene and set the relevant values
@@ -137,14 +138,54 @@ void Trace_Ray(Rayf_t ray, Scene_t *scene, Color_t color, int recursion) {
  * \param scene the scene
  * \param ray the ray we're throwing
  * \param color the color of the ray
- * \param how many times to let the rays bounce
- * \param the index of the light the ray is from
+ * \param lIndex the index of the light the ray is from
+ * \param recursion how many times to let the rays bounce
+ * \param cascade how many ray to make
  */
-Intersection_t *ThrowRay_Scene(Scene_t *scene, Rayf_t ray, Color_t color, int lIndex) {
+Intersection_t *ThrowRay_Scene(Scene_t *scene, Rayf_t ray, Color_t color, int lIndex, int recursion, int cascade) {
+    int i;
+    if (recursion < 1)
+	return NULL;
+
     Intersection_t *intersection = Intersect_Scene(ray, scene);
     if (intersection) {
-	ThrowDiffuse_Rex(( (Geometry_t *) intersection->geo)->diffuse_rex, intersection->u, intersection->v, color);
-	ThrowSpec_Rex(( (Geometry_t *) intersection->geo)->specular_rex[lIndex], intersection->u, intersection->v, ray.dir, color);
+	Vec3f_t lightVec;
+	NegV3f(ray.dir, lightVec);
+
+	Color_t diffuse_color;
+	MultiplyColor(color, intersection->material->diffuse_color, diffuse_color);
+	ScaleColor(color, Clampf(DotV3f(lightVec, intersection->norm)), diffuse_color);
+
+	/* calculate spec_dir */
+	Vec3f_t spec_dir;
+	ReflectV3f(ray.dir, intersection->norm, spec_dir);
+
+	ThrowDiffuse_Rex(( (Geometry_t *) intersection->geo)->diffuse_rex, intersection->u, intersection->v, diffuse_color);
+	ThrowSpec_Rex(( (Geometry_t *) intersection->geo)->specular_rex[lIndex], intersection->u, intersection->v, spec_dir, color);
+
+	/* Cascade the ray */
+	Vec3f_t diffuse_dir; /* directions in which diffuse and spec are maximal */
+	CopyV3f(intersection->norm, diffuse_dir);
+
+	Color_t spec_color;
+
+	Rayf_t bounceRay;
+	CopyV3f(intersection->point, bounceRay.orig);
+	for (i = 0; i < cascade; i++) {
+	    Vec3f_t bounceVec;
+	    
+	    CopyV3f(intersection->norm, bounceVec);
+	    PerturbV3f(bounceVec, .5, bounceVec);
+	    NormalizeV3f(bounceVec);
+	    CopyV3f(bounceVec, bounceRay.dir);
+
+	    /* setup the spec color */
+	    CopyColor(color, spec_color);
+	    ScaleColor(spec_color, pow(Clampf(DotV3f(spec_dir, bounceVec)), intersection->material->spec), spec_color);
+
+	    ThrowRay_Scene(scene, bounceRay, spec_color, lIndex, recursion - 1, cascade);
+	    ThrowRay_Scene(scene, bounceRay, diffuse_color, lIndex, recursion - 1, cascade);
+	}
     }
 
     return intersection;
@@ -166,24 +207,35 @@ void Calculate_Rex(Scene_t *scene, int resolution, int accuracy) {
 
 	scene->geometry[i]->specular_rex = NEWVEC(Rex_t *, scene->nLights);
 	for (j = 0; j < scene->nLights; j++) {
-		scene->geometry[i]->specular_rex[j] = NEW(Rex_t);
-		Init_Rex(scene->geometry[i]->specular_rex[j], resolution);
+	    scene->geometry[i]->specular_rex[j] = NEW(Rex_t);
+	    Init_Rex(scene->geometry[i]->specular_rex[j], resolution);
 	}
     }
-
+    float step = .05;
+    float percent_complete;
     for (i = 0; i < scene->nLights; i++) {
-	Rayf_t lightRay;
-	PointstoRayf(scene->light[i]->pos, scene->light[i]->look_at, &lightRay);
-	Vec3f_t perturb;
-	RandomV3f(perturb);
-	ScaledAddV3f(lightRay.dir, .2, perturb, lightRay.dir);
+	for (j = 0; j < accuracy; j++) {
+	    if ((float) j / accuracy - step > percent_complete) {
+		percent_complete += step;
+		printf("Completion: %f\n", percent_complete);
+	    }
+	    Rayf_t lightRay;
+	    PointstoRayf(scene->light[i]->pos, scene->light[i]->look_at, &lightRay);
+	    PerturbV3f(lightRay.dir, rex_perturb, lightRay.dir);
+
+	    /* shoot the ray */
+	    Color_t lightColor = {255, 255, 255, 255};
+	    ScaleColor(lightColor, scene->light[i]->intensity, lightColor);
+	    ThrowRay_Scene(scene, lightRay, lightColor, i, 1, 0);
+	}
     }
 }
 
 /* !Render_Scene
  * \brief Shoots rays in to a scene to evaluate their color and returns them as an hres by vres array
  * \param scene the scene to be rendered
- * \param wres width resolution (should be a power of 2)
+ * \param wres width resolution (
+should be a power of 2)
  * \param hres height resolution (should be a power of 2)
  */
 Color_t *Render_Scene(Scene_t *scene, int wres, int hres) {

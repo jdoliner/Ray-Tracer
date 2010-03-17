@@ -319,7 +319,6 @@ static inline char ParallelV3f (Vec3f_t u, Vec3f_t v)
  */
 static inline void RandomV3f (Vec3f_t dst)
 {
-    srand(time(NULL));
     int i;
     for (i = 0; i < 3; i++) {
 	dst[i] = (float)rand() / (float)RAND_MAX;
@@ -328,6 +327,17 @@ static inline void RandomV3f (Vec3f_t dst)
     }
 
     NormalizeV3f(dst);
+}
+
+/*! \brief perturb a vector
+ *  \param v the original vector
+ *  \param s how much to scale the peturbing vector
+ *  \param dst the destination vector
+ */
+static inline void PerturbV3f (Vec3f_t v, float s, Vec3f_t dst) {
+    Vec3f_t perturb;
+    RandomV3f(perturb);
+    ScaledAddV3f(v, s, perturb, dst);
 }
 
 //! return a point on a ray
@@ -406,6 +416,16 @@ static inline void SaturatedAddColor (Color_t c1, Color_t c2, Color_t dst)
     dst[0] = AddChar(c1[0], c2[0]);
     dst[1] = AddChar(c1[1], c2[1]);
     dst[2] = AddChar(c1[2], c2[2]);
+}
+
+//! \brief multiply 2 colors
+//! \param c1 color 1
+//! \param c2 color 2
+//! \param dst the destination color
+static inline void MultiplyColor (Color_t c1, Color_t c2, Color_t dst) {
+    dst[0] = (c1[0] * c2[0]) / 255;
+    dst[1] = (c1[1] * c2[1]) / 255;
+    dst[2] = (c1[2] * c2[2]) / 255;
 }
 
 #endif /* !_VECTOR_H_ */

@@ -12,6 +12,7 @@
 #include "primitives/plane.h"
 #include "../engine/defs.h"
 #include "intersection.h"
+#include "../engine/image.h"
 
 #define VARIANCE_CUTOFF 0.3f
 
@@ -70,6 +71,7 @@ Intersection_t *Intersect_Geo(Rayf_t ray, Geometry_t *geometry) {
     if(intersection != NULL) {
 	AddV3f(intersection->point, geometry->trans, intersection->point);
 	intersection->material = geometry->material;
+	intersection->geo = geometry;
     }
 
     return intersection;
@@ -99,7 +101,7 @@ void Init_Rex(Rex_t *rex, int resolution) {
 	for (j = 0; j < resolution; j++) {
 	    CopyColor(init_color, rex->value[i][j]);
 	    CopyV3f(init_vec, rex->vec[i][j]);
-	    rex->nSamples[i] = 0;
+	    rex->nSamples[i][j] = 0;
 	}
     }
     rex->resolution = resolution;
@@ -156,9 +158,26 @@ void ThrowSpec_Rex(Rex_t *rex, float u, float v, Vec3f_t vec, Color_t color) {
  * \param Color_t color the diffuse color at this parameter
  */
 void ThrowDiffuse_Rex(Rex_t *rex, float u, float v, Color_t color) {
+    /* printf("Throwing ray with u = %f, v = %f\n", u, v); */
     int i = GetIndex_Rex(rex, u), j = GetIndex_Rex(rex, v);
 
     rex->nSamples[i][j]++;
 
     BlendColor(color, rex->value[i][j], 1.0f / rex->nSamples[i][j], rex->value[i][j]);
+}
+
+/* !Output_Rex
+ * \brief drop a rex into an image
+ * \param Rex_t *rex the rex to use
+ * \param const char * fname the file name to output to
+ */
+void Output_Rex(Rex_t *rex, const char * fname) {
+    int i, j;
+    Color_t *data = NEWVEC(Color_t, rex->resolution * rex->resolution);
+    for (i = 0; i < rex->resolution; i++)
+	for (j = 0; j < rex->resolution; j++)
+	    CopyColor(rex->value[i][j], data[i + rex->resolution * j]); 
+
+    Image_t *rex_image = New_Image(rex->resolution, rex->resolution, data);
+    Write_Image(rex_image, fname);
 }
