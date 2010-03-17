@@ -107,6 +107,7 @@ Scene_t *Parse_File(const char *fname) {
     for (cur1 = root->children; cur1; cur1 = cur1->next) {
 	if (!xmlStrcmp(cur1->name, (const xmlChar *) "geometry")) {
 	    scene->geometry[++nGeo] = NEW(Geometry_t);
+	    scene->geometry[nGeo]->diffuse_rex = NULL;
 	    for (cur2 = cur1->children; cur2; cur2 = cur2->next) {
 		if (!xmlStrcmp(cur2->name, (const xmlChar *) "sphere")) {
 		    scene->geometry[nGeo]->primitive = (Primitive_t *) NEW(Geo_Sphere_t);

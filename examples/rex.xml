@@ -28,7 +28,7 @@
     <intensity>1.0</intensity>
     <pos> 
       <x>0.0</x> 
-      <y>0.0</y> 
+      <y>2.0</y> 
       <z>2.0</z>
     </pos>
     <look_at>
@@ -39,7 +39,7 @@
   </light>
   <camera>
     <pos> 
-      <x>10.0</x>
+      <x>5.0</x>
       <y>1.0</y>
       <z>0.0</z>
     </pos>

@@ -52,7 +52,6 @@ typedef struct {
     Prim_Type_t		prim_type;	/*!< what type of primitive we have */ 
     Primitive_t		*primitive;	/*!< what point to the object primitive */
     Rex_t		*diffuse_rex;	/*!< the diffuse rex */
-    Rex_t		**specular_rex;	/*!< the specular rex */
 } Geometry_t;
 
 /* !Intersect

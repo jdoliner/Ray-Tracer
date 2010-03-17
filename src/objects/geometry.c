@@ -14,8 +14,6 @@
 #include "intersection.h"
 #include "../engine/image.h"
 
-#define VARIANCE_CUTOFF 0.3f
-
 /* !Calculate_Bbox
  * \brief calculates and sets the bounding box of a geometry object in global coordinates
  */
@@ -107,20 +105,6 @@ void Init_Rex(Rex_t *rex, int resolution) {
     rex->resolution = resolution;
 }
 
-/* !CatchSpec_Rex
- * \brief evaluate a rex for spec at parameter
- * \param Rex_t *rex the rex to evaluate
- * \param u the u parameter
- * \param v the v parameter
- * \param the vector we're viewing along
- * \param dst output color
- */
-void CatchSpec_Rex(Rex_t *rex, float u, float v, Vec3f_t vec, Color_t dst) {
-    int i = GetIndex_Rex(rex, u), j = GetIndex_Rex(rex, v);
-    
-    ScaleColor(rex->value[i][j], Clampf(DotV3f(vec, rex->vec[i][j])), dst);
-}
-
 /* !CatchDiffuse_Rex
  * \brief evaluate a rex for diffuse at a parameter
  * \param Rex_t *rex the rex to evaluate
@@ -131,23 +115,6 @@ void CatchDiffuse_Rex(Rex_t *rex, float u, float v, Color_t dst) {
     int i = GetIndex_Rex(rex, u), j = GetIndex_Rex(rex, v);
 
     CopyColor(rex->value[i][j], dst);
-}
-
-/* !ThrowSpec_Rex
- * \brief Throw a ray onto a rex
- * \param Rex_t *rex the rex to use
- * \param float u the u parameter
- * \param float v the v parameter
- * \param Vec3f_t vec the vector along which the spec intensity is maximal
- * \param Color_t color the color of the spec ray
- */
-void ThrowSpec_Rex(Rex_t *rex, float u, float v, Vec3f_t vec, Color_t color) {
-    int i = GetIndex_Rex(rex, u), j = GetIndex_Rex(rex, v);
-
-    rex->nSamples[i][j]++;
-
-    LerpV3f(rex->vec[i][j], 1.0f / rex->nSamples[i][j], vec, rex->vec[i][j]);
-    BlendColor(color, rex->value[i][j], 1.0f / rex->nSamples[i][j], rex->value[i][j]);
 }
 
 /* !ThrowDiffuse_Rex

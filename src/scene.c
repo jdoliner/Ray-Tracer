@@ -91,8 +91,12 @@ void Trace_Ray(Rayf_t ray, Scene_t *scene, Color_t color, int recursion) {
 	intensity /= scene->nLights;
 	specIntensity /= scene->nLights;
 
-	CopyColor(intersection->material->diffuse_color, diffuse);
-	ScaleColor(diffuse, intensity, diffuse);
+	if (((Geometry_t *) intersection->geo)->diffuse_rex) {
+	    CatchDiffuse_Rex(((Geometry_t *) intersection->geo)->diffuse_rex, intersection->u, intersection->v, diffuse);
+	} else {
+	    CopyColor(intersection->material->diffuse_color, diffuse);
+	    ScaleColor(diffuse, intensity, diffuse);
+	}
 
 	/* compute reflection value */
 	spec[0] = spec[1] = spec[2] = spec[3] = 255;
@@ -142,7 +146,7 @@ void Trace_Ray(Rayf_t ray, Scene_t *scene, Color_t color, int recursion) {
  * \param recursion how many times to let the rays bounce
  * \param cascade how many ray to make
  */
-Intersection_t *ThrowRay_Scene(Scene_t *scene, Rayf_t ray, Color_t color, int lIndex, int recursion, int cascade) {
+Intersection_t *ThrowRay_Scene(Scene_t *scene, Rayf_t ray, Color_t color, int recursion, int cascade) {
     int i;
     if (recursion < 1)
 	return NULL;
@@ -161,7 +165,6 @@ Intersection_t *ThrowRay_Scene(Scene_t *scene, Rayf_t ray, Color_t color, int lI
 	ReflectV3f(ray.dir, intersection->norm, spec_dir);
 
 	ThrowDiffuse_Rex(( (Geometry_t *) intersection->geo)->diffuse_rex, intersection->u, intersection->v, diffuse_color);
-	ThrowSpec_Rex(( (Geometry_t *) intersection->geo)->specular_rex[lIndex], intersection->u, intersection->v, spec_dir, color);
 
 	/* Cascade the ray */
 	Vec3f_t diffuse_dir; /* directions in which diffuse and spec are maximal */
@@ -183,8 +186,8 @@ Intersection_t *ThrowRay_Scene(Scene_t *scene, Rayf_t ray, Color_t color, int lI
 	    CopyColor(color, spec_color);
 	    ScaleColor(spec_color, pow(Clampf(DotV3f(spec_dir, bounceVec)), intersection->material->spec), spec_color);
 
-	    ThrowRay_Scene(scene, bounceRay, spec_color, lIndex, recursion - 1, cascade);
-	    ThrowRay_Scene(scene, bounceRay, diffuse_color, lIndex, recursion - 1, cascade);
+	    ThrowRay_Scene(scene, bounceRay, spec_color, recursion - 1, cascade);
+	    ThrowRay_Scene(scene, bounceRay, diffuse_color, recursion - 1, cascade);
 	}
     }
 
@@ -204,13 +207,8 @@ void Calculate_Rex(Scene_t *scene, int resolution, int accuracy) {
     for (i = 0; i < scene->nGeo; i++) {
 	scene->geometry[i]->diffuse_rex = NEW(Rex_t);
 	Init_Rex(scene->geometry[i]->diffuse_rex, resolution);
-
-	scene->geometry[i]->specular_rex = NEWVEC(Rex_t *, scene->nLights);
-	for (j = 0; j < scene->nLights; j++) {
-	    scene->geometry[i]->specular_rex[j] = NEW(Rex_t);
-	    Init_Rex(scene->geometry[i]->specular_rex[j], resolution);
-	}
     }
+
     float step = .05;
     float percent_complete;
     for (i = 0; i < scene->nLights; i++) {
@@ -226,7 +224,7 @@ void Calculate_Rex(Scene_t *scene, int resolution, int accuracy) {
 	    /* shoot the ray */
 	    Color_t lightColor = {255, 255, 255, 255};
 	    ScaleColor(lightColor, scene->light[i]->intensity, lightColor);
-	    ThrowRay_Scene(scene, lightRay, lightColor, i, 1, 0);
+	    ThrowRay_Scene(scene, lightRay, lightColor, 1, 0);
 	}
     }
 }
