@@ -6,14 +6,37 @@
     </sphere>
     <translation> 
       <x>0</x> 
-      <y>0</y> 
+      <y>1.0</y> 
       <z>0</z>
     </translation>
     <material>
       <diffuse_color> 
-	<r>255</r> 
-	<g>255</g>
-	<b>255</b>
+	<r>195</r> 
+	<g>95</g>
+	<b>95</b>
+      </diffuse_color>
+      <reflection>0.0</reflection>
+      <spec>0.0</spec>
+    </material>
+  </geometry>
+  <geometry>
+    <plane>
+      <normal>
+	<x>0</x> 
+	<y>1.0</y> 
+	<z>0</z>
+      </normal>
+      <point>
+	<x>0</x>
+	<y>0</y> 
+	<z>0</z>
+      </point>
+    </plane>
+    <material>
+      <diffuse_color> 
+	<r>75</r> 
+	<g>75</g>
+	<b>235</b>
       </diffuse_color>
       <reflection>0.0</reflection>
       <spec>0.0</spec>

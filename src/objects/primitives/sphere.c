@@ -7,6 +7,7 @@
 
 #include "../geometry.h"
 #include "sphere.h"
+#include "math.h"
 
 /*! \brief intersect a ray with a sphere, only returns the first intersection point
  */
@@ -43,8 +44,8 @@ Intersection_t *Intersect_Sphere(Rayf_t *ray, Geo_Sphere_t *sphere) {
 	NormalizeV3f(intersection->norm);
 
 	/* compute texture coordinates */
-	intersection->u = (intersection->norm[0] + 1) / 2;
-	intersection->v = (intersection->norm[1] + 1) / 2;
+	intersection->u = ((atan2(intersection->norm[1], intersection->norm[0]) / 3.142) + 1) / 2; 
+	intersection->v = (intersection->norm[2] + 1) / 2;
 
 	return intersection;
     }

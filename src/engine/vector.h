@@ -423,9 +423,10 @@ static inline void SaturatedAddColor (Color_t c1, Color_t c2, Color_t dst)
 //! \param c2 color 2
 //! \param dst the destination color
 static inline void MultiplyColor (Color_t c1, Color_t c2, Color_t dst) {
-    dst[0] = (c1[0] * c2[0]) / 255;
-    dst[1] = (c1[1] * c2[1]) / 255;
-    dst[2] = (c1[2] * c2[2]) / 255;
+    dst[0] = (char) lrint( ((float) c1[0] / (float) 255)* c2[0]);
+    dst[1] = (char) lrint( ((float) c1[1] / (float) 255)* c2[1]);
+    dst[2] = (char) lrint( ((float) c1[2] / (float) 255)* c2[2]);
+    dst[3] = 255;
 }
 
 #endif /* !_VECTOR_H_ */

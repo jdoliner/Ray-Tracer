@@ -158,7 +158,7 @@ Intersection_t *ThrowRay_Scene(Scene_t *scene, Rayf_t ray, Color_t color, int re
 
 	Color_t diffuse_color;
 	MultiplyColor(color, intersection->material->diffuse_color, diffuse_color);
-	ScaleColor(color, Clampf(DotV3f(lightVec, intersection->norm)), diffuse_color);
+	ScaleColor(diffuse_color, Clampf(DotV3f(lightVec, intersection->norm)), diffuse_color);
 
 	/* calculate spec_dir */
 	Vec3f_t spec_dir;
@@ -209,7 +209,7 @@ void Calculate_Rex(Scene_t *scene, int resolution, int accuracy) {
 	Init_Rex(scene->geometry[i]->diffuse_rex, resolution);
     }
 
-    float step = .05;
+    float step = .01;
     float percent_complete;
     for (i = 0; i < scene->nLights; i++) {
 	for (j = 0; j < accuracy; j++) {
@@ -224,7 +224,7 @@ void Calculate_Rex(Scene_t *scene, int resolution, int accuracy) {
 	    /* shoot the ray */
 	    Color_t lightColor = {255, 255, 255, 255};
 	    ScaleColor(lightColor, scene->light[i]->intensity, lightColor);
-	    ThrowRay_Scene(scene, lightRay, lightColor, 1, 0);
+	    ThrowRay_Scene(scene, lightRay, lightColor, 2, 10);
 	}
     }
 }
