@@ -18,6 +18,7 @@
       <reflection>0.0</reflection>
       <transparency>0.0</transparency>
       <refraction>1.0</refraction>
+      <spec>1.0</spec>
     </material>
   </geometry>
   <geometry>
@@ -38,6 +39,7 @@
       <reflection>0.0</reflection>
       <transparency>0.0</transparency>
       <refraction>1.0</refraction>
+      <spec>1.0</spec>
     </material>
   </geometry>
   <geometry>
@@ -58,6 +60,7 @@
       <reflection>0.0</reflection>
       <transparency>0.0</transparency>
       <refraction>1.0</refraction>
+      <spec>1.0</spec>
     </material>
   </geometry>
   <geometry>
@@ -75,9 +78,10 @@
 	<g>165</g>
 	<b>165</b>
       </diffuse_color>
-      <reflection>.5</reflection>
+      <reflection>0.0</reflection>
       <transparency>0.0</transparency>
       <refraction>1.0</refraction>
+      <spec>1.0</spec>
     </material>
   </geometry>
   <geometry>
@@ -95,9 +99,10 @@
 	<g>165</g>
 	<b>165</b>
       </diffuse_color>
-      <reflection>.5</reflection>
+      <reflection>0.0</reflection>
       <transparency>0.0</transparency>
       <refraction>1.0</refraction>
+      <spec>1.0</spec>
     </material>
   </geometry>
   <light>
@@ -108,9 +113,9 @@
     </color>
     <intensity>1.0</intensity>
     <pos> 
-      <x>4.0</x> 
-      <y>2.0</y> 
-      <z>4.0</z>
+      <x>3.0</x> 
+      <y>8.0</y> 
+      <z>0.0</z>
     </pos>
     <look_at>
       <x>0.0</x> 

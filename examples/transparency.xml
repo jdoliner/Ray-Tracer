@@ -15,9 +15,10 @@
 	<g>165</g>
 	<b>165</b>
       </diffuse_color>
-      <reflection>0.0</reflection>
-      <transparency>.5</transparency>
+      <reflection>0.3</reflection>
+      <transparency>.3</transparency>
       <refraction>.6</refraction>
+      <spec>3.0</spec>
     </material>
   </geometry>
   <geometry>
@@ -47,6 +48,7 @@
       <reflection>0.0</reflection>
       <transparency>0.0</transparency>
       <refraction>1.0</refraction>
+      <spec>3.0</spec>
     </material>
   </geometry>
   <light>
