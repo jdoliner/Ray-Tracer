@@ -21,9 +21,6 @@ int main (int argc, char *argv[]) {
 
     if (scene->settings->radiosity) {
 	Calculate_Rex(scene, 1024, scene->settings->rad_accuracy);
-	for (i = 0; i < scene->nGeo; i++) {
-	    Output_Rex(scene->geometry[i]->diffuse_rex, "rex.ppm");
-	}
     }
 
     int width = 1024, height = 1024;

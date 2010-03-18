@@ -11,12 +11,12 @@
     </translation>
     <material>
       <diffuse_color> 
-	<r>195</r> 
-	<g>95</g>
-	<b>95</b>
+	<r>215</r> 
+	<g>215</g>
+	<b>215</b>
       </diffuse_color>
       <reflection>0.0</reflection>
-      <spec>0.0</spec>
+      <spec>1.0</spec>
     </material>
   </geometry>
   <geometry>
@@ -34,9 +34,9 @@
     </plane>
     <material>
       <diffuse_color> 
-	<r>75</r> 
+	<r>235</r> 
 	<g>75</g>
-	<b>235</b>
+	<b>75</b>
       </diffuse_color>
       <reflection>0.0</reflection>
       <spec>0.0</spec>

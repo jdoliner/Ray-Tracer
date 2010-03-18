@@ -146,7 +146,7 @@ void Trace_Ray(Rayf_t ray, Scene_t *scene, Color_t color, int recursion) {
  * \param recursion how many times to let the rays bounce
  * \param cascade how many ray to make
  */
-Intersection_t *ThrowRay_Scene(Scene_t *scene, Rayf_t ray, Color_t color, int recursion, int cascade) {
+void ThrowRay_Scene(Scene_t *scene, Rayf_t ray, Color_t color, int recursion, int cascade) {
     int i;
     if (recursion < 1)
 	return NULL;
@@ -188,10 +188,10 @@ Intersection_t *ThrowRay_Scene(Scene_t *scene, Rayf_t ray, Color_t color, int re
 
 	    ThrowRay_Scene(scene, bounceRay, spec_color, recursion - 1, cascade);
 	    ThrowRay_Scene(scene, bounceRay, diffuse_color, recursion - 1, cascade);
-	}
-    }
 
-    return intersection;
+	}
+	free(intersection);
+    }
 }
 
 /* !Calculate_Rex
