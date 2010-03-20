@@ -3,6 +3,14 @@
 
 \begin{document}
 
+\title{Raytracer}
+\author{Joe Doliner}
+
+\maketitle
+
+\section{Introduction}
+For my project I designed and implemented a toy raytracer. It does diffuse and specular lighting (per pixel of course) It also supports raytraced transparency, refraction and reflection. And radiosity texturing for bidirectional tracing.
+
 \section{Scene Language}
 Scenes are described using xml files. The scene schema has the following constraints:
 \begin{itemize}
@@ -23,10 +31,10 @@ My raytracer is pretty limited in termis of primitives right now, it only parses
 The heart of the program is of course the intersection functionality. I've implemented an Intersect Scene which takes a ray (the same structure we used for the other projects) and a Scene t * and returns the first thing the ray hits as an Intersection t. An Intersection t struct contains, a pointer to the geometry object it hit, the normal of the intersection the point in world space at which the intersection occurred, the parameter of the ray at which the intersection occurred, and u and v parameters for the textures of the objects (used for radiosity).
 
 \section{Tracing}
-Using the intersection we can get a color value for each ray we shoot, then we can use that to calculate diffuse and specular intensity using the ideas we've used for fragment shading (as well as shadows). Then we can look at the geometry's material and if it has reflectance we reflect our original ray over the normal of the intersection, shoot again and blend the colors. Similarly if we have transparency we can do a snell's law refraction and reshoot the ray.
+Using the intersection we can get a color value for each ray we shoot, then we can use that to calculate diffuse and specular intensity using fragment shading calculations. Also for each light we can shoot a ray at it and see if we get an intersection. If we do then we don't use that light in calculating diffuse and specular values since the fragment is in shadow. Then we can look at the geometry's material and if it has reflectance we reflect our original ray over the normal of the intersection, shoot again and blend the colors. Similarly if we have transparency we can do a snell's law refraction and reshoot the ray.
 
 \section{Radiosity Textures: the good stuff}
-If a scene enables the radiosity option, then each geometry objects has a Radiosity Textures record the illumination on the surface of the geometry using forward tracing. That is rays start at the lights and then we shoot them in to the scene and record what they hit, the light rays also cascade off of geometry. This allows for more accurate light simulations. In particular it allows for things that are obscured or not directly facing a light to still be illuminated by it and allows the geometry to pick up color from the geometry around it.
+If a scene enables the radiosity option then before we do any tracing every geometry object has a radiosity texture computed for it. Radiosity textures are computed using a monte-carlo technique, for each light, rays are shot randomly into the scene. When a ray intersects with an object we increase the value in the radiosity texture where the light ray hit. With enough rays the radiosity textures give a smooth accurate image of the illumination in the scene. Furthermore, everytime a ray hits a surface it also bounces off and gets shot back into the scene. This allows geometry to pick up on light not coming directly from light sources but bouncing off of other geometry first.
 
 The paper I based my implentation on: \url{http://citeseerx.ist.psu.edu/viewdoc/download;jsessionid=C492EA2FEBCDC524D296C1C8F68F9353?doi=10.1.1.84.4862&rep=rep1&type=pdf} 
 

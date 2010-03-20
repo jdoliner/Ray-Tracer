@@ -4,7 +4,7 @@
 # Project related configuration options
 #---------------------------------------------------------------------------
 DOXYFILE_ENCODING      = UTF-8
-PROJECT_NAME           = "Project 2 (CMSC 23700; Winter 2008)   "
+PROJECT_NAME           = "Raytracer - Joe Doliner"
 PROJECT_NUMBER         = 
 OUTPUT_DIRECTORY       = doc
 CREATE_SUBDIRS         = NO

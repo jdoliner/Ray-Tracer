@@ -149,7 +149,7 @@ void Trace_Ray(Rayf_t ray, Scene_t *scene, Color_t color, int recursion) {
 void ThrowRay_Scene(Scene_t *scene, Rayf_t ray, Color_t color, int recursion, int cascade) {
     int i;
     if (recursion < 1)
-	return NULL;
+	return ;
 
     Intersection_t *intersection = Intersect_Scene(ray, scene);
     if (intersection) {

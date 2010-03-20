@@ -1,1 +1,22 @@
-Nothing to see here right now
+A toy raytracer.
+Joe Doliner
+
+compiling:
+This project is known to work on 64bit Ubuntu with libxml installed. It should work fine on 32 bit
+
+build:
+cd build
+make
+
+documentation:
+cd build
+make doc
+
+running:
+examples scenes can be found in /examples
+
+to run them:
+cd build
+./tracer ../examples/name.xml
+
+output will be written as output.ppm

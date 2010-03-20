@@ -9,7 +9,7 @@
 
 int main (int argc, char *argv[]) {
     srand(time(NULL));
-    int i;
+    int i, j;
 
     if (argc < 2)
 	assert(0);
@@ -30,6 +30,21 @@ int main (int argc, char *argv[]) {
     Write_Image(output, "output.ppm");
 
     Delete_Image(output);
+
+    /* clean up the memory */
+    for (i = 0; i < scene->nLights; i++)
+	free(scene->light[i]);
+    for (i = 0; i < scene->nGeo; i++) {
+	for (j = 0; j < scene->geometry[i]->diffuse_rex->resolution; j++) {
+	    free(scene->geometry[i]->diffuse_rex->value[i]);
+	    free(scene->geometry[i]->diffuse_rex->vec[i]);
+	    free(scene->geometry[i]->diffuse_rex->nSamples[i]);
+	}
+	free(scene->geometry[i]->diffuse_rex);
+	free(scene->geometry[i]);
+    }
+
+    free(scene);
 
     return 0;
 }

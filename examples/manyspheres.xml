@@ -592,7 +592,7 @@
       <g>185</g>
       <b>185</b>
     </bg_color>
-    <radiosity>0</radiosity>
+    <radiosity>1</radiosity>
     <rad_accuracy>100000000</rad_accuracy>
   </settings>
 </scene>
